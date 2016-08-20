@@ -1,28 +1,21 @@
 #pragma once
 #include "WindowBase.h"
 
-class SolidWindow : public WindowBase<SolidWindow>
+class SolidWindow : public WindowBase
 {
 public:
 	SolidWindow(
 		std::wstring className,
 		std::wstring title = L"Solid Window",
-		int x = 50,
-		int y = 50,
-		int width = 500,
-		int height = 300,
-		DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
-		HWND parent = NULL,
-		HINSTANCE instance = NULL) :
-		WindowBase<SolidWindow>(title, x, y, width, height, style, parent, instance)
+		RECT position = RECT{ 50, 50, 500, 300 }
+	) :
+		WindowBase(position, title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU, NULL, NULL)
 	{
 		_class_name = className;
 	}
-	~SolidWindow();
 
 
 protected:
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	virtual std::wstring className();
 	virtual void updateClass(WNDCLASSEXW& wc);
 };

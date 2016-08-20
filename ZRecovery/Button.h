@@ -8,27 +8,14 @@ public:
 	Button(
 		HWND parent,
 		std::wstring text = L"Button",
-		int x = 50,
-		int y = 50,
-		int width = 100,
-		int height = 30,
-		DWORD style = WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-		HINSTANCE instance = NULL,
-		LPVOID param = NULL
+		RECT position = RECT{ 0, 0, 100, 30 }
 	) :
-		ControlBase(parent, text, x, y, width, height, style, instance),
-		onClick(nullptr)
+		ControlBase(position, text, WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, parent, NULL, NULL)
 	{
 		_class_name = L"BUTTON";
 	}
 
-	virtual ~Button() {}
-
-	void create() {
-		baseCreate();
-		registerControl();
-	}
-	virtual LRESULT handleCommand(UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		UINT cmd;
 		cmd = LOWORD(wParam);
 		switch (cmd)

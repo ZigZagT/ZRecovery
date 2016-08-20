@@ -23,31 +23,13 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	return (INT_PTR)FALSE;
 }
 
-SolidWindow::~SolidWindow()
-{
-}
-
 LRESULT SolidWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
-	case WM_COMMAND:
-	{
-		int wmId = LOWORD(wParam);
-		// Parse the menu selections:
-		switch (wmId)
-		{
-		case IDM_ABOUT:
-			DialogBox(_instance, MAKEINTRESOURCE(IDD_ABOUTBOX), _hwnd, About);
-			break;
-		case IDM_EXIT:
-			DestroyWindow(_hwnd);
-			break;
-		default:
-			return baseHandleMessage(uMsg, wParam, lParam);
-		}
-	}
-	break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;
@@ -61,16 +43,28 @@ LRESULT SolidWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		//FillRect(hdc, &ps.rcPaint, CreateSolidBrush(RGB((color & mask_r) >> 16, (color & mask_g) >> 8, color & mask_b)));
 		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW));
 		EndPaint(_hwnd, &ps);
+		return 0;
 	}
-	break;
+	case WM_COMMAND:
+	{
+		int wmId = LOWORD(wParam);
+		// Parse the menu selections:
+		switch (wmId)
+		{
+		case IDM_ABOUT:
+			DialogBox(_instance, MAKEINTRESOURCE(IDD_ABOUTBOX), _hwnd, About);
+			break;
+		case IDM_EXIT:
+			DestroyWindow(_hwnd);
+			break;
+		default:
+			return DefWindowProc(_hwnd, uMsg, wParam, lParam);
+		}
+		break;
+	}
 	default:
-		return baseHandleMessage(uMsg, wParam, lParam);
+		return DefWindowProc(_hwnd, uMsg, wParam, lParam);
 	}
-}
-
-std::wstring SolidWindow::className()
-{
-	return _class_name;
 }
 
 void SolidWindow::updateClass(WNDCLASSEXW & wcex)

@@ -1,73 +1,71 @@
 #pragma once
 #include "stdafx.h"
+#include "Debug.h"
 
-class UIBase
+class UIBase;
+class IUIElement;
+
+class IUIElement {
+	using windowPtr = UIBase*;
+public:
+	virtual void create() = 0;
+	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
+	virtual HWND getHandler() = 0;
+	virtual void register_window() = 0;
+	virtual void unregister_window() = 0;
+	virtual UIBase& query_window(HWND hwnd) = 0;
+
+	virtual void setPosition(RECT position) = 0;
+	virtual void setText(std::wstring text) = 0;
+	virtual void setFont(HFONT) = 0;
+	virtual void refresh() = 0;
+};
+
+class UIBase : virtual public IUIElement
 {
 public:
+	UIBase() {}
 	UIBase(
-		int x = 50,
-		int y = 50,
-		int width = 100,
-		int height = 30,
-		std::wstring name = L"UI Element",
-		DWORD style = WS_OVERLAPPED,
-		HWND parent = NULL,
-		HINSTANCE instance = NULL,
-		LPVOID param = NULL) :
-		_x(x),
-		_y(y),
-		_width(width),
-		_height(height),
+		RECT position,
+		std::wstring name,
+		DWORD style,
+		HWND parent,
+		HINSTANCE instance,
+		LPVOID param) :
+		_position(position),
 		_name(name),
 		_style(style),
 		_parent(parent),
 		_instance(instance),
-		_param(param),
+		_param(param)
+	{}
 
-		_hwnd(NULL),
-		_class_name(L"INVALID_UI_CLASS")
-		{}
+	virtual ~UIBase() {
+		unregister_window();
+		DestroyWindow(_hwnd);
 
-	virtual ~UIBase() {};
-
-	void setX(int x) { _x = x; }
-	void setY(int y) { _y = y; }
-	void setWidth(int width) { _width = width; }
-	void setHeight(int height) { _height = height; }
-	void setName(std::wstring name) { _name = name; }
-	void setStyle(DWORD style) { _style = style; }
-	void setParent(HWND parent) { _parent = parent; }
-	void setInstance(HINSTANCE instance) { _instance = instance; }
-	void setParam(LPVOID param) { _param = param; }
-
-	int getX() { return _x; }
-	int getY() { return _y; }
-	int getWidth() { return _width; }
-	int getHeight() { return _height; }
-	std::wstring getName() { return _name; }
-	DWORD getStyle() { return _style; }
-	HWND getParent() { return _parent; }
-	HINSTANCE getInstance() { return _instance; }
-	LPVOID getParam() { return _param; }
+		try {
+			if (_parent != NULL) {
+				auto& p = query_window(_parent);
+				p._children.erase(_hwnd);
+			}
+		}
+		catch (std::out_of_range) {}
+	};
 	
-	HWND getHandler() { return _hwnd; }
-	void setFont(HFONT font) {
-		SendMessage(_hwnd, WM_SETFONT, (WPARAM)font, (LPARAM)TRUE);
-	}
 
 protected:
-	int _x;
-	int _y;
-	int _width;
-	int _height;
-	std::wstring _name;
-	DWORD _style;
-	HWND _parent;
-	HINSTANCE _instance;
-	LPVOID _param;
+	RECT _position = RECT{ 0, 0, 500, 300 };
+	std::wstring _name = L"UI Element";
+	DWORD _style = WS_OVERLAPPED;
+	HWND _parent = NULL;
+	std::set<HWND> _children = {};
+	HINSTANCE _instance = NULL;
+	LPVOID _param = NULL;
 
-	HWND _hwnd;
-	std::wstring _class_name;
+	HWND _hwnd = NULL;
+	std::wstring _class_name = L"INVALID_UI_CLASS";
+	LPCTSTR _window_class = NULL;
 
 	void baseCreate() {
 
@@ -77,27 +75,74 @@ protected:
 		else if (_instance == NULL) {
 			_instance = GetModuleHandle(NULL);
 		}
-
+		if (_window_class == NULL) {
+			_window_class = _class_name.c_str();
+		}
 		_hwnd = CreateWindow(
-			_class_name.c_str(),
+			_window_class,
 			_name.c_str(),
 			_style,
-			_x,
-			_y,
-			_width,
-			_height,
+			_position.left,
+			_position.top,
+			_position.right - _position.left,
+			_position.bottom - _position.top,
 			_parent,
 			NULL,
 			_instance,
 			_param
 		);
-		//HFONT font;
-		//font = CreateFont(18, 0, 0, 0, 400, FALSE, FALSE, FALSE, GB2312_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, DEFAULT_PITCH, L"Segoe UI");
-		//SendMessage(_hwnd, WM_SETFONT, (WPARAM)font, (LPARAM)TRUE);
+
+		if (_hwnd == NULL) {
+			throw std::runtime_error("baseCreate create window failed");
+		}
+		register_window();
 		setFont(_default_font);
+
+		try {
+			if (_parent != NULL) {
+				auto& p = query_window(_parent);
+				p._children.insert(_hwnd);
+			}
+		}
+		catch (std::out_of_range) {}
 	}
 
 private:
 	static HFONT _default_font;
+
+// Implementation of IUIElement
+public:
+	virtual void create() {
+		baseCreate();
+	}
+	//virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	//	return DefWindowProc(_hwnd, uMsg, wParam, lParam);
+	//}
+	virtual HWND getHandler() { return _hwnd; }
+	virtual void register_window() {
+		_window_registry.insert(std::make_pair(_hwnd, this));
+	}
+	virtual void unregister_window() {
+		_window_registry.erase(_hwnd);
+	}
+	virtual UIBase& query_window(HWND hwnd) {
+		return *_window_registry.at(hwnd);
+	}
+
+	virtual void setPosition(RECT position) {
+		//SetWindowPos(_hwnd, NULL, position.left, position.top, position.right - position.left, position.bottom - position.top, 0);
+		MoveWindow(_hwnd, position.left, position.top, position.right - position.left, position.bottom - position.top, TRUE);
+	}
+	virtual void setText(std::wstring text) {
+		SendMessage(_hwnd, WM_SETTEXT, (WPARAM)NULL, (LPARAM)text.c_str());
+	}
+	void setFont(HFONT font) {
+		SendMessage(_hwnd, WM_SETFONT, (WPARAM)font, (LPARAM)TRUE);
+	}
+	void refresh() {
+		UpdateWindow(_hwnd);
+	}
+private:
+	static std::map<HWND, UIBase*> _window_registry;
 };
 

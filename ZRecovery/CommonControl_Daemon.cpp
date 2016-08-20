@@ -9,7 +9,8 @@ CommonControl_Daemon::CommonControl_Daemon()
 	control.dwSize = sizeof(control);
 
 	std::vector<DWORD> ICCs = {
-		ICC_STANDARD_CLASSES
+		ICC_STANDARD_CLASSES,
+		ICC_TAB_CLASSES
 	};
 
 	for (auto icc : ICCs) {

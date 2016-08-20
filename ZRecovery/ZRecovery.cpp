@@ -3,13 +3,10 @@
 
 #include "stdafx.h"
 #include "ZRecovery.h"
+#include "UI.h"
 #include "WIM.h"
 #include "debug.h"
-#include "Button.h"
-#include "SolidWindow.h"
 #include "load_resource.h"
-#include "Label.h"
-#include "Font.h"
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
@@ -26,19 +23,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	auto wnd = SolidWindow(load_resource<std::wstring>(hInstance, IDC_ZRECOVERY), load_resource<std::wstring>(hInstance, IDS_APP_TITLE));
 	wnd.create();
-	Button btn(wnd.getHandler(), L"Button1", 50, 50, 100, 30);
+
+	Tab tab(wnd.getHandler());
+	tab.create();
+	tab.insert(L"tab1");
+	tab.insert(L"tab2");
+
+	Button btn(tab.getHandler(), L"Button1", RECT{ 50, 50, 150, 80 });
 	btn.onClick = [](HWND, LPARAM) {
 		Alert("Button1 clicked!");
 	};
 	btn.create();
 
-	Button btn2(wnd.getHandler(), L"Button2", 160, 50, 100, 30);
+	Button btn2(tab.getHandler(), L"Button2", RECT{ 160, 50, 260, 80 });
 	btn2.onClick = [](auto, auto) {
 		Alert("Button2 clicked!");
 	};
 	btn2.create();
 
-	Label lab(wnd.getHandler(), L"Label", 270, 50, 100, 30);
+	Label lab(tab.getHandler(), L"Label", RECT{ 270, 50, 370, 80 });
 	lab.create();
 	lab.setFont(Font(30).Create());
 
@@ -47,6 +50,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		Alert("Button3 clicked!");
 	};
 	btn3.create();*/
+
+
 
 	wnd.show(nCmdShow);
 
