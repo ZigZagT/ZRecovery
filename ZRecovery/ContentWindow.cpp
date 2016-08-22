@@ -1,29 +1,13 @@
 #include "stdafx.h"
+#include "ContentWindow.h"
+
+
+#include "stdafx.h"
 #include "resource.h"
 #include "SolidWindow.h"
 #include "Debug.h"
 
-// Message handler for about box.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	UNREFERENCED_PARAMETER(lParam);
-	switch (message)
-	{
-	case WM_INITDIALOG:
-		return (INT_PTR)TRUE;
-
-	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-		{
-			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
-		}
-		break;
-	}
-	return (INT_PTR)FALSE;
-}
-
-LRESULT SolidWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT ContentWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -51,9 +35,6 @@ LRESULT SolidWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		// Parse the menu selections:
 		switch (wmId)
 		{
-		case IDM_ABOUT:
-			DialogBox(_instance, MAKEINTRESOURCE(IDD_ABOUTBOX), _hwnd, About);
-			break;
 		case IDM_EXIT:
 			DestroyWindow(_hwnd);
 			break;
@@ -67,7 +48,7 @@ LRESULT SolidWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-void SolidWindow::updateClass(WNDCLASSEXW & wcex)
+void ContentWindow::updateClass(WNDCLASSEXW & wcex)
 {
 	return;
 

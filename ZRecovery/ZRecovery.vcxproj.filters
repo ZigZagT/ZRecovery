@@ -96,6 +96,15 @@
     <ClInclude Include="Tab.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="DialogBase.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelessDialog.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentWindow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -135,6 +144,15 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Tab.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogBase.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelessDialog.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentWindow.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>

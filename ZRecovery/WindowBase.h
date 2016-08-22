@@ -9,7 +9,7 @@ public:
 	virtual LRESULT dispatch_message(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 };
 
-class WindowBase : public UIBase, virtual public IWindow
+class WindowBase : public UIBase, public IWindow
 {
 public:
 	WindowBase(
@@ -22,7 +22,17 @@ public:
 		:
 		UIBase(position, title, style, parent, instance, this)
 	{}
-	~WindowBase() {}
+	WindowBase(WindowBase&) = delete;
+	WindowBase(WindowBase&& old) noexcept :
+	UIBase(std::move(old))
+	{
+		SetWindowLongPtr(_hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+	}
+	~WindowBase() {
+		if (_is_valid) {
+			UnregisterClass(_class_name.c_str(), _instance);
+		}
+	}
 
 	void setTitle(std::wstring title) { setText(title); }
 
@@ -71,20 +81,53 @@ public:
 	LRESULT dispatch_message(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg)
 		{
+		case WM_NOTIFY:
+		{
+			NMHDR& nmhdr = *(NMHDR*)lParam;
+			if ((UINT_PTR)wParam != nmhdr.idFrom) {
+				Alert("WM_NOTIFY: wParam invalid!");
+			}
+			auto k = _children.size();
+			if (_children.find(nmhdr.hwndFrom) == _children.end()) {
+				goto defaultHandleMessage;
+			}
+			auto wnd = query_window(nmhdr.hwndFrom);
+			std::map<UINT, std::string> code;
+			code[NM_CLICK] = "NM_CLICK";
+			code[TCN_FOCUSCHANGE] = "TCN_FOCUSCHANGE";
+			code[TCN_GETOBJECT] = "TCN_GETOBJECT";
+			code[TCN_KEYDOWN] = "TCN_KEYDOWN";
+			code[TCN_SELCHANGE] = "TCN_SELCHANGE";
+			code[TCN_SELCHANGING] = "TCN_SELCHANGING";
+			if (code.find(nmhdr.code) != code.end()) {
+				//Alert(code[nmhdr.code]);
+			}
+			else {
+				//Alert(wnd->getName() + L" : " + std::to_wstring(nmhdr.code));
+			}
+			return wnd->handleMessage(uMsg, wParam, lParam);
+			break;
+		}
 		case WM_COMMAND:
-			HWND hControl;
-			hControl = reinterpret_cast<HWND>(lParam);
+		{
+			if (lParam == 0) {
+				goto defaultHandleMessage;
+			}
+			HWND hControl = reinterpret_cast<HWND>(lParam);
 			try {
-				auto& ptr = query_window(hControl);
-				return ptr.handleMessage(uMsg, wParam, lParam);
+				auto wnd = query_window(hControl);
+				return wnd->handleMessage(uMsg, wParam, lParam);
+				break;
 			}
 			catch (std::out_of_range) {
-				goto handleMsg;
+				//Alert("WM_COMMAND invalid hwnd");
+				goto defaultHandleMessage;
 			}
-		default:
-			goto handleMsg;
 		}
-	handleMsg:
+		default:
+			goto defaultHandleMessage;
+		}
+	defaultHandleMessage:
 		return handleMessage(uMsg, wParam, lParam);
 	}
 	virtual void updateClass(WNDCLASSEXW& wc) = 0;

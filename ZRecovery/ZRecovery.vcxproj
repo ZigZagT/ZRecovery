@@ -165,8 +165,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ContentWindow.h" />
     <ClInclude Include="ControlBase.h" />
+    <ClInclude Include="DialogBase.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="ModelessDialog.h" />
     <ClInclude Include="Tab.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Label.h" />
@@ -189,10 +192,13 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CommonControl_Daemon.cpp" />
     <ClCompile Include="COM_Daemon.cpp" />
+    <ClCompile Include="ContentWindow.cpp" />
     <ClCompile Include="ControlBase.cpp" />
+    <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="load_resource.cpp" />
+    <ClCompile Include="ModelessDialog.cpp" />
     <ClCompile Include="SolidWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

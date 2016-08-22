@@ -23,37 +23,33 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	auto wnd = SolidWindow(load_resource<std::wstring>(hInstance, IDC_ZRECOVERY), load_resource<std::wstring>(hInstance, IDS_APP_TITLE));
 	wnd.create();
+	wnd.show(nCmdShow);
 
 	Tab tab(wnd.getHandler());
 	tab.create();
 	tab.insert(L"tab1");
 	tab.insert(L"tab2");
+	tab.insert(L"tab3");
 
-	Button btn(tab.getHandler(), L"Button1", RECT{ 50, 50, 150, 80 });
+	Button btn(tab[0].getHandler(), L"Button1", RECT{ 50, 50, 150, 80 });
 	btn.onClick = [](HWND, LPARAM) {
 		Alert("Button1 clicked!");
 	};
 	btn.create();
 
-	Button btn2(tab.getHandler(), L"Button2", RECT{ 160, 50, 260, 80 });
+	Button btn2(tab[1].getHandler(), L"Button2", RECT{ 160, 50, 260, 80 });
 	btn2.onClick = [](auto, auto) {
 		Alert("Button2 clicked!");
 	};
 	btn2.create();
 
-	Label lab(tab.getHandler(), L"Label", RECT{ 270, 50, 370, 80 });
+	Label lab(tab[2].getHandler(), L"Label", RECT{ 270, 50, 370, 80 });
 	lab.create();
 	lab.setFont(Font(30).Create());
 
-	/*Button btn3(lab.getHandler(), L"Button3", 0, 30, 100, 30);
-	btn3.onClick = [](auto, auto) {
-		Alert("Button3 clicked!");
-	};
-	btn3.create();*/
 
 
-
-	wnd.show(nCmdShow);
+	
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_ZRECOVERY));
     MSG msg;

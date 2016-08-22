@@ -1,19 +1,20 @@
 #pragma once
 #include "WindowBase.h"
 
-class SolidWindow : public WindowBase
+class ContentWindow : public WindowBase
 {
 public:
-	SolidWindow(
+	ContentWindow(
+		HWND parent,
 		std::wstring className,
-		std::wstring title = L"Solid Window",
 		RECT position = RECT{ 50, 50, 500, 300 }
 	) :
-		WindowBase(position, title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU, NULL, NULL)
+		WindowBase(position, L"", WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_OVERLAPPED, parent, NULL)
 	{
 		_class_name = className;
 	}
-	SolidWindow(SolidWindow&&) noexcept = default;
+	ContentWindow(ContentWindow&&) noexcept = default;
+	virtual ~ContentWindow() {}
 
 
 protected:

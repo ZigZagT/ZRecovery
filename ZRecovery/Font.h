@@ -5,7 +5,7 @@ class Font
 {
 public:
 	Font();
-	Font(int size, int weight = 400, std::wstring face = L"Segoe UI");
+	Font(int size, int weight = 400, std::wstring face = L"MS Shell Dlg");
 	~Font();
 	HFONT Create() {
 		return CreateFont(Height, Width, Escapement, Orientation, Weight, Italic, Underline, StrikeOut, CharSet, OutputPrecision, ClipPrecision, Quality, PitchAndFamily, Fac.c_str());
@@ -24,6 +24,6 @@ public:
 	DWORD   ClipPrecision = CLIP_DEFAULT_PRECIS;
 	DWORD   Quality = CLEARTYPE_QUALITY;
 	DWORD   PitchAndFamily = DEFAULT_PITCH;
-	std::wstring Fac = L"Segoe UI";
+	std::wstring Fac = L"MS Shell Dlg";
 };
 
