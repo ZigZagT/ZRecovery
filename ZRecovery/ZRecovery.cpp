@@ -21,10 +21,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	hInst = hInstance;
 
-	auto wnd = SolidWindow(load_resource<std::wstring>(hInstance, IDC_ZRECOVERY), load_resource<std::wstring>(hInstance, IDS_APP_TITLE));
+	auto wnd = SolidWindow(load_resource<std::wstring>(hInstance, IDC_ZRECOVERY), load_resource<std::wstring>(hInstance, IDS_APP_TITLE), RECT{0, 0, 800, 600});
 	wnd.create();
-	wnd.show(nCmdShow);
-
+	
 	Tab tab(wnd.getHandler());
 	tab.create();
 	tab.insert(L"tab1");
@@ -45,9 +44,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	Label lab(tab[2].getHandler(), L"Label", RECT{ 270, 50, 370, 80 });
 	lab.create();
-	lab.setFont(Font(30).Create());
+	//lab.setFont(Font(30).Create());
 
-
+	wnd.show(nCmdShow);
 
 	
 

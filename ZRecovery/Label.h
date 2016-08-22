@@ -11,7 +11,7 @@ public:
 		RECT position = RECT{ 0, 0, 100, 30 },
 		DWORD style = 0
 	) :
-		ControlBase(position, text, WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER | SS_NOTIFY | style, parent, NULL, NULL) {
+		ControlBase(position, text, WS_CHILD | WS_VISIBLE | SS_CENTER | SS_NOTIFY | style, parent, NULL, NULL) {
 		_class_name = L"STATIC";
 	}
 

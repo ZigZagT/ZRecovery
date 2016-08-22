@@ -15,6 +15,8 @@ public:
 	virtual IUIElement* query_window(HWND hwnd) = 0;
 
 	virtual std::wstring getName() = 0;
+	virtual HINSTANCE getInstance() = 0;
+	virtual LPCTSTR getClassName() = 0;
 	virtual void setPosition(RECT position) = 0;
 	virtual void setText(std::wstring text) = 0;
 	virtual void setFont(HFONT) = 0;
@@ -76,6 +78,8 @@ public:
 	};
 	
 	virtual std::wstring getName() { return _name; }
+	HINSTANCE getInstance() { return _instance; }
+	LPCTSTR getClassName() { return _window_class; }
 
 protected:
 	RECT _position = RECT{ 0, 0, 500, 300 };

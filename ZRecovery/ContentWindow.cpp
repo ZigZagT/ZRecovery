@@ -25,7 +25,7 @@ LRESULT ContentWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		HDC hdc = BeginPaint(_hwnd, &ps);
 		//FillRect(hdc, &ps.rcPaint, CreateSolidBrush(RGB((color & mask_r) >> 16, (color & mask_g) >> 8, color & mask_b)));
-		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+		FillRect(hdc, &ps.rcPaint, background);
 		EndPaint(_hwnd, &ps);
 		return 0;
 	}
@@ -50,14 +50,29 @@ LRESULT ContentWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void ContentWindow::updateClass(WNDCLASSEXW & wcex)
 {
-	return;
-
+	/*HBRUSH brush = (HBRUSH)(COLOR_WINDOW + 1);
+	try {
+		auto wnd = query_window(_parent);
+		auto hwnd = wnd->getHandler();
+		WNDCLASSEX wcex;
+		auto ui = dynamic_cast<UIBase*>(wnd);
+		if (hwnd) {
+			if (GetClassInfoEx(ui->getInstance(), ui->getClassName(), &wcex)) {
+				brush = wcex.hbrBackground;
+			}
+			else {
+				auto k = GetLastError();
+				k = k + 0;
+			}
+		}
+	} catch (...) {}
+	*/
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
 	wcex.hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ZRECOVERY));
 	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcex.hbrBackground = background;
 	wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_ZRECOVERY);
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 }

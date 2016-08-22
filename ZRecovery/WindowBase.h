@@ -35,6 +35,7 @@ public:
 	}
 
 	void setTitle(std::wstring title) { setText(title); }
+	HBRUSH background = (HBRUSH)(COLOR_WINDOW + 1);
 
 private:
 	static LRESULT CALLBACK _windowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -81,6 +82,10 @@ public:
 	LRESULT dispatch_message(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg)
 		{
+		case WM_CTLCOLORBTN:
+			return (LRESULT)background;
+		case WM_CTLCOLORSTATIC:
+			return (LRESULT)background;
 		case WM_NOTIFY:
 		{
 			NMHDR& nmhdr = *(NMHDR*)lParam;
