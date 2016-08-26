@@ -7,6 +7,8 @@ class IUIElement;
 
 class IUIElement {
 public:
+	using EventHandler = std::function<void(IUIElement* sender, unsigned long long EventArgs)>;
+
 	virtual void create() = 0;
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 	virtual HWND getHandler() = 0;

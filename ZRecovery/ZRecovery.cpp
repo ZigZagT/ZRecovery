@@ -26,23 +26,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	
 	Tab tab(wnd.getHandler());
 	tab.create();
-	tab.insert(L"tab1");
-	tab.insert(L"tab2");
-	tab.insert(L"tab3");
 
-	Button btn(tab[0].getHandler(), L"Button1", RECT{ 50, 50, 150, 80 });
-	btn.onClick = [](HWND, LPARAM) {
-		Alert("Button1 clicked!");
+	tab.insert(L"button");
+	Button btn(tab[0].getHandler(), L"Button", RECT{ 50, 50, 150, 80 });
+	btn.onClick = [](auto, auto) {
+		Alert("Button clicked!");
 	};
 	btn.create();
 
-	Button btn2(tab[1].getHandler(), L"Button2", RECT{ 160, 50, 260, 80 });
-	btn2.onClick = [](auto, auto) {
-		Alert("Button2 clicked!");
+	tab.insert(L"textbox");
+	TextBox tbx(tab[1].getHandler(), RECT{ 50, 50, 250, 70 }, L"TextBox");
+	tbx.create();
+	Button btn_tbx(tab[1].getHandler(), L"Test", RECT{ 50, 90, 150, 120 });
+	btn_tbx.onClick = [&tbx](auto s, auto) {
+		//auto tbx = dynamic_cast<TextBox*>(s);
+		auto txt = tbx.getText();
+		Alert(std::wstring(L"TextBox content is: [") + txt  + L"]\n Add mark...");
+		tbx.setText(std::wstring(L"Mark: [") + txt + L"]");
 	};
-	btn2.create();
+	btn_tbx.create();
 
-	Label lab(tab[2].getHandler(), L"Label", RECT{ 270, 50, 370, 80 });
+	tab.insert(L"label");
+	Label lab(tab[2].getHandler(), L"Label", RECT{ 50, 50, 150, 80 });
 	lab.create();
 	//lab.setFont(Font(30).Create());
 

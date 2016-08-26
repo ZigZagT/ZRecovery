@@ -1,20 +1,20 @@
 #pragma once
 #include "WindowBase.h"
 
-class ContentWindow : public WindowBase
+class Container : public WindowBase
 {
 public:
-	ContentWindow(
+	Container(
 		HWND parent,
 		std::wstring className,
 		RECT position = RECT{ 50, 50, 500, 300 }
 	) :
-		WindowBase(position, L"", WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_OVERLAPPED, parent, NULL)
+		WindowBase(position, L"", WS_CHILD | WS_VISIBLE, parent, NULL)
 	{
 		_class_name = className;
 	}
-	ContentWindow(ContentWindow&&) noexcept = default;
-	virtual ~ContentWindow() {}
+	Container(Container&&) noexcept = default;
+	virtual ~Container() {}
 
 
 protected:

@@ -34,6 +34,12 @@
     <Filter Include="Source Files\WIM">
       <UniqueIdentifier>{db141dbd-2fb5-4600-9281-c41630cc89ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI\Base">
+      <UniqueIdentifier>{527a5285-d83d-437e-8f65-b0e8274daae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\Base">
+      <UniqueIdentifier>{dd81b7e7-704b-4e4b-9137-01086192f5eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -66,16 +72,7 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="ControlBase.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="SolidWindow.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowBase.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UIBase.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="WIM.h">
@@ -96,13 +93,25 @@
     <ClInclude Include="Tab.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="DialogBase.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="ModelessDialog.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="ContentWindow.h">
+    <ClInclude Include="TextBox.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlBase.h">
+      <Filter>Header Files\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowBase.h">
+      <Filter>Header Files\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBase.h">
+      <Filter>Header Files\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogBase.h">
+      <Filter>Header Files\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Container.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,13 +140,7 @@
     <ClCompile Include="load_resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ControlBase.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Label.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UIBase.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
@@ -146,13 +149,22 @@
     <ClCompile Include="Tab.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="DialogBase.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="ModelessDialog.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="ContentWindow.cpp">
+    <ClCompile Include="TextBox.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBase.cpp">
+      <Filter>Source Files\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogBase.cpp">
+      <Filter>Source Files\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlBase.cpp">
+      <Filter>Source Files\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Container.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,8 +17,10 @@ public:
 
 private:
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
-		auto cmd = LOWORD(wParam);
-		Alert("message " + std::to_string(cmd));
-		return DefWindowProc(_hwnd, uMsg, wParam, lParam);
+		switch (uMsg)
+		{
+		default:
+			return DefWindowProc(_hwnd, uMsg, wParam, lParam);
+		}
 	}
 };

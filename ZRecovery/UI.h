@@ -4,6 +4,8 @@
 #include "Button.h"
 #include "Label.h"
 #include "Tab.h"
+#include "Container.h"
+#include "TextBox.h"
 
 #include "SolidWindow.h"
 

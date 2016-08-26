@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "ControlBase.h"
-#include "ContentWindow.h"
+#include "Container.h"
 
 class Tab : public ControlBase
 {
@@ -25,14 +25,14 @@ public:
 	}
 		
 	void insert(std::wstring name);
-	ContentWindow* at(size_t index);
-	ContentWindow& operator[](size_t index);
+	Container* at(size_t index);
+	Container& operator[](size_t index);
 	//void insert(std::wstring name, size_t position);
 
 	
 private:
 	size_t _index = 0;
-	std::vector<ContentWindow> _tab_content;
+	std::vector<Container> _tab_content;
 
 	// Override IUIElement
 public:

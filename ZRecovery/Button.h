@@ -26,7 +26,7 @@ public:
 			{
 			case BN_CLICKED:
 				if (onClick) {
-					onClick(_hwnd, lParam);
+					onClick(this, lParam);
 				}
 				return 0;
 			default:
@@ -38,5 +38,5 @@ public:
 		}
 	}
 
-	std::function<void(HWND, LPARAM)> onClick;
+	EventHandler onClick;
 };

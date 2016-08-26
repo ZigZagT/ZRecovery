@@ -166,12 +166,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ContentWindow.h" />
+    <ClInclude Include="Container.h" />
     <ClInclude Include="ControlBase.h" />
     <ClInclude Include="DialogBase.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="ModelessDialog.h" />
     <ClInclude Include="Tab.h" />
+    <ClInclude Include="TextBox.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="WindowBase.h" />
@@ -193,7 +194,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CommonControl_Daemon.cpp" />
     <ClCompile Include="COM_Daemon.cpp" />
-    <ClCompile Include="ContentWindow.cpp" />
+    <ClCompile Include="Container.cpp" />
     <ClCompile Include="ControlBase.cpp" />
     <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -208,6 +209,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tab.cpp" />
+    <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="WIM.cpp" />
     <ClCompile Include="ZRecovery.cpp" />

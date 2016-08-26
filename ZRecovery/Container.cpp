@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "ContentWindow.h"
+#include "Container.h"
 
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "SolidWindow.h"
 #include "Debug.h"
 
-LRESULT ContentWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT Container::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -48,7 +48,7 @@ LRESULT ContentWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-void ContentWindow::updateClass(WNDCLASSEXW & wcex)
+void Container::updateClass(WNDCLASSEXW & wcex)
 {
 	/*HBRUSH brush = (HBRUSH)(COLOR_WINDOW + 1);
 	try {

@@ -29,10 +29,10 @@ void Tab::insert(std::wstring name)
 	++_index;
 }
 
-ContentWindow* Tab::at(size_t index) {
+Container* Tab::at(size_t index) {
 	return &_tab_content[index];
 }
-ContentWindow& Tab::operator[](size_t index) {
+Container& Tab::operator[](size_t index) {
 	return _tab_content[index];
 }
 
