@@ -111,7 +111,13 @@
     <ClInclude Include="DialogBase.h">
       <Filter>Header Files\UI\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Container.h">
+    <ClInclude Include="TreeView.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ListView.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -121,9 +127,6 @@
     </ClCompile>
     <ClCompile Include="ZRecovery.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="SolidWindow.cpp">
       <Filter>Source Files\UI</Filter>
@@ -140,19 +143,10 @@
     <ClCompile Include="load_resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Label.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Tab.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelessDialog.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="TextBox.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="UIBase.cpp">
@@ -161,10 +155,10 @@
     <ClCompile Include="DialogBase.cpp">
       <Filter>Source Files\UI\Base</Filter>
     </ClCompile>
-    <ClCompile Include="ControlBase.cpp">
-      <Filter>Source Files\UI\Base</Filter>
+    <ClCompile Include="ListView.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Container.cpp">
+    <ClCompile Include="Canvas.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,9 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "ControlBase.h"
-#include "Container.h"
+#include "Canvas.h"
 
-class Tab : public ControlBase
+class Tab : public ControlBase, public IUIContainer<Canvas>
 {
 	typedef struct {
 		TCITEMHEADER header;
@@ -25,18 +25,23 @@ public:
 	}
 		
 	void insert(std::wstring name);
-	Container* at(size_t index);
-	Container& operator[](size_t index);
+	Canvas& at(size_t index);
+	Canvas& operator[](size_t index);
 	//void insert(std::wstring name, size_t position);
 
 	
 private:
-	size_t _index = 0;
-	std::vector<Container> _tab_content;
+	size_t _count = 0;
+	std::vector<Canvas> _tab_content;
 
 	// Override IUIElement
 public:
 	virtual void create();
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+	// Inherited via IUIContainer
+	virtual void insert(Canvas&& item) override;
+	virtual size_t count() override;
+	virtual void erase(size_t index) override;
 };
 

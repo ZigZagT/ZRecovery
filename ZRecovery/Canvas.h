@@ -1,10 +1,10 @@
 #pragma once
 #include "WindowBase.h"
 
-class Container : public WindowBase
+class Canvas : public WindowBase
 {
 public:
-	Container(
+	Canvas(
 		HWND parent,
 		std::wstring className,
 		RECT position = RECT{ 50, 50, 500, 300 }
@@ -13,8 +13,8 @@ public:
 	{
 		_class_name = className;
 	}
-	Container(Container&&) noexcept = default;
-	virtual ~Container() {}
+	Canvas(Canvas&& old) noexcept = default;
+	virtual ~Canvas() {}
 
 
 protected:

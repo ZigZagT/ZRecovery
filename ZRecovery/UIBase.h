@@ -10,6 +10,7 @@ public:
 	using EventHandler = std::function<void(IUIElement* sender, unsigned long long EventArgs)>;
 
 	virtual void create() = 0;
+	virtual bool isValid() = 0;
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 	virtual HWND getHandler() = 0;
 	virtual void register_window() = 0;
@@ -23,6 +24,15 @@ public:
 	virtual void setText(std::wstring text) = 0;
 	virtual void setFont(HFONT) = 0;
 	virtual void refresh() = 0;
+};
+
+template <typename ContentType>
+class IUIContainer {
+	virtual void insert(ContentType&& item) = 0;
+	virtual ContentType& at(size_t index) = 0;
+	virtual ContentType& operator[](size_t index) = 0;
+	virtual size_t count() = 0;
+	virtual void erase(size_t index) = 0;
 };
 
 class UIBase : virtual public IUIElement
@@ -98,6 +108,9 @@ protected:
 	bool _is_valid = false;
 
 	void baseCreate() {
+		if (_is_valid) {
+			throw std::runtime_error("already created");
+		}
 
 		if (_parent != NULL && _instance == NULL) {
 			_instance = (HINSTANCE)GetWindowLong(_parent, GWLP_HINSTANCE);
@@ -149,6 +162,9 @@ public:
 	virtual void create() {
 		baseCreate();
 	}
+	virtual bool isValid() {
+		return _is_valid;
+	}
 	//virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	//	return DefWindowProc(_hwnd, uMsg, wParam, lParam);
 	//}
@@ -173,10 +189,10 @@ public:
 	virtual void setText(std::wstring text) {
 		SendMessage(_hwnd, WM_SETTEXT, (WPARAM)NULL, (LPARAM)text.c_str());
 	}
-	void setFont(HFONT font) {
+	virtual void setFont(HFONT font) {
 		SendMessage(_hwnd, WM_SETFONT, (WPARAM)font, (LPARAM)FALSE);
 	}
-	void refresh() {
+	virtual void refresh() {
 		UpdateWindow(_hwnd);
 	}
 private:

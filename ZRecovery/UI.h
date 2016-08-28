@@ -4,8 +4,10 @@
 #include "Button.h"
 #include "Label.h"
 #include "Tab.h"
-#include "Container.h"
+#include "Canvas.h"
 #include "TextBox.h"
+#include "ListView.h"
+#include "TreeView.h"
 
 #include "SolidWindow.h"
 

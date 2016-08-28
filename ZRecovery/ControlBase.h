@@ -21,6 +21,7 @@ public:
 	) :
 		UIBase(position, name, style, parent, instance, param)
 	{}
+	ControlBase(ControlBase&) = delete;
 	virtual ~ControlBase() {}
 
 };

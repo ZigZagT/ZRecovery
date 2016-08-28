@@ -51,6 +51,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	lab.create();
 	//lab.setFont(Font(30).Create());
 
+	tab.insert(L"listview");
+	ListView lsv(tab[3].getHandler(), L"", RECT{ 50, 50, 700, 350 }, WS_BORDER);
+	lsv.create();
+	lsv.insert(ListViewItem{ L"haha1", L"t1", L"y1" });
+	lsv.insert(ListViewItem{ L"haha2", L"t2", L"y2" });
+	lsv.insert(ListViewItem{ L"haha3", L"t3", L"y3" });
+	lsv.setStyle(lsv.details);
+	lsv.setColumns(L"Col1", L"Col2", L"Col3");
+
 	wnd.show(nCmdShow);
 
 	

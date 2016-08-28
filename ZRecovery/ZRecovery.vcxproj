@@ -37,7 +37,7 @@
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -51,7 +51,7 @@
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -166,13 +166,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Container.h" />
+    <ClInclude Include="Canvas.h" />
     <ClInclude Include="ControlBase.h" />
     <ClInclude Include="DialogBase.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="ListView.h" />
     <ClInclude Include="ModelessDialog.h" />
     <ClInclude Include="Tab.h" />
     <ClInclude Include="TextBox.h" />
+    <ClInclude Include="TreeView.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="WindowBase.h" />
@@ -191,16 +193,13 @@
     <ClInclude Include="ZRecovery.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Button.cpp" />
     <ClCompile Include="CommonControl_Daemon.cpp" />
     <ClCompile Include="COM_Daemon.cpp" />
-    <ClCompile Include="Container.cpp" />
-    <ClCompile Include="ControlBase.cpp" />
+    <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="Font.cpp" />
-    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="ListView.cpp" />
     <ClCompile Include="load_resource.cpp" />
-    <ClCompile Include="ModelessDialog.cpp" />
     <ClCompile Include="SolidWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -209,7 +208,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tab.cpp" />
-    <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="WIM.cpp" />
     <ClCompile Include="ZRecovery.cpp" />

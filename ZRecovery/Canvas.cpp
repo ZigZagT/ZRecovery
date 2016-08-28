@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Container.h"
+#include "Canvas.h"
 
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "SolidWindow.h"
 #include "Debug.h"
 
-LRESULT Container::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT Canvas::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -48,7 +48,7 @@ LRESULT Container::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-void Container::updateClass(WNDCLASSEXW & wcex)
+void Canvas::updateClass(WNDCLASSEXW & wcex)
 {
 	/*HBRUSH brush = (HBRUSH)(COLOR_WINDOW + 1);
 	try {

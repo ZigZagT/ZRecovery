@@ -7,10 +7,10 @@ void Tab::insert(std::wstring name)
 	item.header.mask = TCIF_TEXT;
 	item.header.pszText = const_cast<wchar_t*>(name.c_str());
 	item.lParam = 0;
-	if (TabCtrl_InsertItem(_hwnd, _index, &item) == -1) {
+	if (TabCtrl_InsertItem(_hwnd, _count, &item) == -1) {
 		throw std::runtime_error("tab insert item error");
 	}
-	_tab_content.emplace_back(_hwnd, _name + L"TAB::" + std::to_wstring(_index) + L"::" + name);
+	_tab_content.emplace_back(_hwnd, _name + L"TAB::" + std::to_wstring(_count) + L"::" + name);
 	auto& child = _tab_content.back();
 	child.create();
 	RECT rc;
@@ -19,20 +19,20 @@ void Tab::insert(std::wstring name)
 	child.setPosition(rc);
 	
 	int i = TabCtrl_GetCurSel(_hwnd);
-	if (_index == i) {
+	if (_count == i) {
 		ShowWindow(child.getHandler(), SW_SHOWNA);
 	}
 	else {
 		ShowWindow(child.getHandler(), SW_HIDE);
 	}
 
-	++_index;
+	++_count;
 }
 
-Container* Tab::at(size_t index) {
-	return &_tab_content[index];
+Canvas& Tab::at(size_t index) {
+	return _tab_content[index];
 }
-Container& Tab::operator[](size_t index) {
+Canvas& Tab::operator[](size_t index) {
 	return _tab_content[index];
 }
 
@@ -83,4 +83,42 @@ LRESULT Tab::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			return DefWindowProc(_hwnd, uMsg, wParam, lParam);
 		}
 	}
+}
+
+void Tab::insert(Canvas&& item)
+{
+	TabItem tab_item;
+	tab_item.header.mask = TCIF_TEXT;
+	tab_item.header.pszText = const_cast<wchar_t*>(item.getName().c_str());
+	tab_item.lParam = 0;
+	if (TabCtrl_InsertItem(_hwnd, _count, &tab_item) == -1) {
+		throw std::runtime_error("tab insert item error");
+	}
+	_tab_content.emplace_back(std::move(item));
+	auto& child = _tab_content.back();
+	if (child.isValid()) {
+		RECT rc;
+		GetClientRect(_hwnd, &rc);
+		TabCtrl_AdjustRect(_hwnd, FALSE, &rc);
+		child.setPosition(rc);
+
+		int i = TabCtrl_GetCurSel(_hwnd);
+		if (_count == i) {
+			ShowWindow(child.getHandler(), SW_SHOWNA);
+		}
+		else {
+			ShowWindow(child.getHandler(), SW_HIDE);
+		}
+	}
+	++_count;
+}
+
+size_t Tab::count()
+{
+	return _count;
+}
+
+void Tab::erase(size_t index)
+{
+	throw std::runtime_error("not implemented");
 }
