@@ -118,7 +118,7 @@ protected:
 		}
 
 		if (_parent != NULL && _instance == NULL) {
-			_instance = (HINSTANCE)GetWindowLong(_parent, GWLP_HINSTANCE);
+			_instance = reinterpret_cast<HINSTANCE>(GetWindowLong(_parent, GWLP_HINSTANCE));
 		}
 		else if (_instance == NULL) {
 			_instance = GetModuleHandle(NULL);

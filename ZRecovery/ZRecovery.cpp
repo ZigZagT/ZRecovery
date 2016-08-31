@@ -62,13 +62,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	tab.insert(L"html ui");
 	auto html = std::ifstream(R"abcd(index.html)abcd");
-	std::ostringstream iss;
-	iss << html.rdbuf();
-	std::string html_str = iss.str();
+	std::ostringstream oss;
+	oss << html.rdbuf();
+	std::string html_str = oss.str();
 	HTMLUI_TypeInfo::register_event_handler("html_button_click", [](auto btn, auto) {
 		Alert(std::wstring(L"Html Button Clicked: ") + btn->getName());
 	});
-	auto& node = HTMLUI_Parser::Parse(html_str);
+	auto& node = HTMLUI_Parser::parse(html_str);
 	HTMLUI_Parser::recursive_create(node, tab.back().getHandler());
 	wnd.show(nCmdShow);
 

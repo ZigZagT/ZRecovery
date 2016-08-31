@@ -60,7 +60,7 @@ void ListView::setStyle(style_t s) {
 void ListView::insert(ListViewItem& item) {
 	LVITEM lv_item;
 	lv_item.mask = LVIF_TEXT;
-	lv_item.iItem = _count;
+	lv_item.iItem = static_cast<int>(_count);
 	lv_item.iSubItem = 0;
 	lv_item.pszText = const_cast<wchar_t*>(item.name.c_str());
 

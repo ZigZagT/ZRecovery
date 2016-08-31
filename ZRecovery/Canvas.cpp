@@ -41,7 +41,6 @@ LRESULT Canvas::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		default:
 			return DefWindowProc(_hwnd, uMsg, wParam, lParam);
 		}
-		break;
 	}
 	default:
 		return DefWindowProc(_hwnd, uMsg, wParam, lParam);

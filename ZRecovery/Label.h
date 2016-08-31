@@ -19,6 +19,7 @@ private:
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg)
 		{
+		case WM_NOTIFY:
 		default:
 			return DefWindowProc(_hwnd, uMsg, wParam, lParam);
 		}

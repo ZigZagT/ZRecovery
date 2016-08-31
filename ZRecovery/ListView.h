@@ -38,7 +38,7 @@ public:
 	template <typename... Types>
 	void setColumns(std::wstring col, Types... others) {
 		clearColumns();
-		_insertColumns(col, others...);
+		_insertColumns<Types...>(col, others...);
 	}
 	template <typename ContainerT>
 	void setColumns(ContainerT cols) {
@@ -122,7 +122,7 @@ private:
 		lv_col.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_FMT | LVCF_SUBITEM;
 		lv_col.fmt = LVCFMT_LEFT;
 		lv_col.cx = 100;
-		lv_col.iSubItem = _col_count;
+		lv_col.iSubItem = static_cast<int>(_col_count);
 		lv_col.pszText = (wchar_t*)col.c_str();
 		ListView_InsertColumn(_hwnd, _col_count, &lv_col);
 		++_col_count;
