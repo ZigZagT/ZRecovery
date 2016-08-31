@@ -1,7 +1,9 @@
 [submodule "gumbo-parser"]
 	path = gumbo-parser
-	url = https://github.com/google/gumbo-parser
-	branch = v0.10.2
+	url = https://github.com/4Oranges/gumbo-parser
+	branch = vc++x64
 [submodule "katana-parser"]
+
 	path = katana-parser
+
 	url = https://github.com/4Oranges/katana-parser/
