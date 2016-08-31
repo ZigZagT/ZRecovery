@@ -9,7 +9,7 @@
 #include "load_resource.h"
 
 // Global Variables:
-HINSTANCE hInst;                                // current instance
+HINSTANCE hInst;                                // ui instance
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,

@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZRecovery", "ZRecovery\ZRecovery.vcxproj", "{20046DB2-3419-4541-93BA-701177FE52EF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC} = {2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gumbo", "gumbo-parser\visualc\gumbo.vcxproj", "{2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,12 @@ Global
 		{20046DB2-3419-4541-93BA-701177FE52EF}.Release|x64.Build.0 = Release|x64
 		{20046DB2-3419-4541-93BA-701177FE52EF}.Release|x86.ActiveCfg = Release|Win32
 		{20046DB2-3419-4541-93BA-701177FE52EF}.Release|x86.Build.0 = Release|Win32
+		{2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC}.Debug|x64.ActiveCfg = Debug|Win32
+		{2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC}.Debug|x86.ActiveCfg = Debug|Win32
+		{2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC}.Debug|x86.Build.0 = Debug|Win32
+		{2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC}.Release|x64.ActiveCfg = Release|x64
+		{2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC}.Release|x86.ActiveCfg = Release|Win32
+		{2661FA5E-ACC3-4D27-8FD2-9DBB0414EEDC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

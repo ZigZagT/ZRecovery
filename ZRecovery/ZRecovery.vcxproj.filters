@@ -40,6 +40,12 @@
     <Filter Include="Source Files\UI\Base">
       <UniqueIdentifier>{dd81b7e7-704b-4e4b-9137-01086192f5eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI\HTMLUI">
+      <UniqueIdentifier>{e4ab9bcf-2342-4b8d-a007-6b3fe7b2c763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\HTMLUI">
+      <UniqueIdentifier>{8919ab7d-5386-4df5-a28f-1be8bd6c19d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -120,6 +126,12 @@
     <ClInclude Include="Canvas.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="HTMLtoUI_Daemon.h">
+      <Filter>Header Files\DAEMON</Filter>
+    </ClInclude>
+    <ClInclude Include="HTMLUI.h">
+      <Filter>Header Files\UI\HTMLUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -160,6 +172,15 @@
     </ClCompile>
     <ClCompile Include="Canvas.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HTMLtoUI_Daemon.cpp">
+      <Filter>Source Files\DAEMON</Filter>
+    </ClCompile>
+    <ClCompile Include="HTMLUI.cpp">
+      <Filter>Source Files\UI\HTMLUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

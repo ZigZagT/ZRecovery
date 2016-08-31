@@ -1,8 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "ControlBase.h"
+#include "HTMLUI.h"
 
-class Button : public ControlBase
+class Button : public ControlBase, public HTMLUI<Button>
 {
 public:
 	Button(
@@ -39,4 +40,10 @@ public:
 	}
 
 	EventHandler onClick;
+
+	// Inherited via HTMLUI
+	static HTMLUI_TypeInfo::UIConstructor create_from_html;
+	virtual void bind_event_handler(std::string event_name, IUIElement::EventHandler handler) override;
+	static HTMLUI_TypeInfo::UIMatchAttrMap match_attributes;
+	static HTMLUI_TypeInfo::UISupportedEventsSet supported_events;
 };

@@ -4,6 +4,8 @@
 
 class UIBase;
 class IUIElement;
+template<typename>
+class IUIContainer;
 
 class IUIElement {
 public:
@@ -35,7 +37,8 @@ class IUIContainer {
 	virtual void erase(size_t index) = 0;
 };
 
-class UIBase : virtual public IUIElement
+
+class UIBase : public IUIElement
 {
 public:
 	UIBase() {}
@@ -55,7 +58,7 @@ public:
 	{}
 	UIBase(UIBase&) = delete;
 	UIBase(UIBase&& old) noexcept :
-		_position(old._position),
+	_position(old._position),
 		_name(old._name),
 		_style(old._style),
 		_parent(old._parent),
@@ -88,7 +91,7 @@ public:
 		}
 		catch (std::out_of_range) {}
 	};
-	
+
 	virtual std::wstring getName() { return _name; }
 	HINSTANCE getInstance() { return _instance; }
 	LPCTSTR getClassName() { return _window_class; }
@@ -157,7 +160,7 @@ protected:
 private:
 	static HFONT _default_font;
 
-// Implementation of IUIElement
+	// Implementation of IUIElement
 public:
 	virtual void create() {
 		baseCreate();
