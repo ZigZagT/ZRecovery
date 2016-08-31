@@ -76,3 +76,24 @@ void Canvas::updateClass(WNDCLASSEXW & wcex)
 	wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_ZRECOVERY);
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 }
+
+void Canvas::bind_event_handler(std::string event_name, IUIElement::EventHandler handler)
+{
+}
+
+HTMLUI_TypeInfo::UIConstructor Canvas::create_from_html = [](HTMLUI_UIDescriptor& des) -> std::shared_ptr<UIBase> {
+	DWORD style = 0;
+	if (des.border) {
+		style |= WS_BORDER;
+	}
+	auto ret = std::shared_ptr<UIBase>(new Canvas(des.parent, des.identifer(L"Canvas"), des.position(), style), [](auto& p) {delete (Canvas*)p; });
+	
+	ret->create();
+	return ret;
+};
+HTMLUI_TypeInfo::UIMatchAttrMap Canvas::match_attributes {
+	{"class", "canvas"}
+};
+HTMLUI_TypeInfo::UISupportedEventsSet Canvas::supported_events{
+	
+};

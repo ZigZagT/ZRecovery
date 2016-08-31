@@ -51,6 +51,8 @@
 #include <set>
 #include <unordered_set>
 #include <locale>
+#include <fstream>
+#include <sstream>
 
 // COM Header Files
 #include <Objbase.h>

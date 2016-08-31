@@ -122,3 +122,13 @@ void Tab::erase(size_t index)
 {
 	throw std::runtime_error("not implemented");
 }
+
+Canvas & Tab::back()
+{
+	return _tab_content.back();
+}
+
+Canvas & Tab::front()
+{
+	return _tab_content.front();
+}

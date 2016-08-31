@@ -33,6 +33,8 @@ class IUIContainer {
 	virtual void insert(ContentType&& item) = 0;
 	virtual ContentType& at(size_t index) = 0;
 	virtual ContentType& operator[](size_t index) = 0;
+	virtual ContentType& back() = 0;
+	virtual ContentType& front() = 0;
 	virtual size_t count() = 0;
 	virtual void erase(size_t index) = 0;
 };

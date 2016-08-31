@@ -196,4 +196,9 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="index.html">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

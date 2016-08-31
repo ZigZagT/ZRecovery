@@ -103,6 +103,8 @@ public:
 	virtual ListViewItem & operator[](size_t index) override;
 	virtual size_t count() override;
 	virtual void erase(size_t index) override;
+	virtual ListViewItem & back() override;
+	virtual ListViewItem & front() override;
 
 private:
 	size_t _count = 0;

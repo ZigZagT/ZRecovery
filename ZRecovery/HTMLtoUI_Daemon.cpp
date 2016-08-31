@@ -7,6 +7,7 @@ HTMLtoUI_Daemon HTMLtoUI_Daemon::_UI_Daemon;
 HTMLtoUI_Daemon::HTMLtoUI_Daemon()
 {
 	Button::HTMLtoUI_Enable();
+	Canvas::HTMLtoUI_Enable();
 }
 
 

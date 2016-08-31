@@ -43,5 +43,7 @@ public:
 	virtual void insert(Canvas&& item) override;
 	virtual size_t count() override;
 	virtual void erase(size_t index) override;
+	virtual Canvas & back() override;
+	virtual Canvas & front() override;
 };
 

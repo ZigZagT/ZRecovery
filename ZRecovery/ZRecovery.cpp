@@ -60,6 +60,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	lsv.setStyle(lsv.details);
 	lsv.setColumns(L"Col1", L"Col2", L"Col3");
 
+	tab.insert(L"html ui");
+	auto html = std::ifstream(R"abcd(index.html)abcd");
+	std::ostringstream iss;
+	iss << html.rdbuf();
+	std::string html_str = iss.str();
+	HTMLUI_TypeInfo::register_event_handler("html_button_click", [](auto btn, auto) {
+		Alert(std::wstring(L"Html Button Clicked: ") + btn->getName());
+	});
+	auto& node = HTMLUI_Parser::Parse(html_str);
+	HTMLUI_Parser::recursive_create(node, tab.back().getHandler());
 	wnd.show(nCmdShow);
 
 	

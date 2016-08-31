@@ -93,3 +93,13 @@ void ListView::erase(size_t index)
 {
 	throw std::runtime_error("not implemented");
 }
+
+ListViewItem & ListView::back()
+{
+	return _items.back();
+}
+
+ListViewItem & ListView::front()
+{
+	return _items.front();
+}
