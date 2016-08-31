@@ -2,3 +2,6 @@
 	path = gumbo-parser
 	url = https://github.com/google/gumbo-parser
 	branch = v0.10.2
+[submodule "katana-parser"]
+	path = katana-parser
+	url = https://github.com/4Oranges/katana-parser/
