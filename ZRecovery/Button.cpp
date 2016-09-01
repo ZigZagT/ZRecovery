@@ -3,7 +3,7 @@
 
 void Button::bind_event_handler(std::string event_name, IUIElement::EventHandler handler)
 {
-	if (HTMLUI_TypeInfo::case_insensitive_compare(event_name, "onClick")) {
+	if (case_insensitive_compare(event_name, "onClick")) {
 		onClick = handler;
 	}
 }

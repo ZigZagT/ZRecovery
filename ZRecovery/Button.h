@@ -42,6 +42,7 @@ public:
 	EventHandler onClick;
 
 	// Inherited via HTMLUI
+public:
 	virtual void bind_event_handler(std::string event_name, IUIElement::EventHandler handler) override;
 	static HTMLUI_TypeInfo::UIConstructor create_from_html;
 	static HTMLUI_TypeInfo::UIMatchAttrMap match_attributes;

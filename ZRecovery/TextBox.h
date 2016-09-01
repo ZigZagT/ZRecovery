@@ -1,7 +1,8 @@
 #pragma once
 #include "ControlBase.h"
+#include "HTMLUI.h"
 
-class TextBox : public ControlBase
+class TextBox : public ControlBase, public HTMLUI<TextBox>
 {
 public:
 	TextBox(
@@ -63,5 +64,12 @@ public:
 	}
 
 	EventHandler onTextChange;
+
+	// Inherited via HTMLUI
+public:
+	virtual void bind_event_handler(std::string event_name, IUIElement::EventHandler handler) override;
+	static HTMLUI_TypeInfo::UIConstructor create_from_html;
+	static HTMLUI_TypeInfo::UIMatchAttrMap match_attributes;
+	static HTMLUI_TypeInfo::UISupportedEventsSet supported_events;
 };
 

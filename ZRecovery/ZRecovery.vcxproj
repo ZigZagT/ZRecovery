@@ -176,6 +176,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="ListView.h" />
     <ClInclude Include="ModelessDialog.h" />
+    <ClInclude Include="string_man.h" />
     <ClInclude Include="Tab.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="TreeView.h" />
@@ -217,6 +218,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tab.cpp" />
+    <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="HTMLtoUI_Daemon.cpp" />
     <ClCompile Include="WIM.cpp" />

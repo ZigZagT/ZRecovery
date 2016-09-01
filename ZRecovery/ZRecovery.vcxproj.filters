@@ -132,6 +132,9 @@
     <ClInclude Include="HTMLUI.h">
       <Filter>Header Files\UI\HTMLUI</Filter>
     </ClInclude>
+    <ClInclude Include="string_man.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -173,16 +176,19 @@
     <ClCompile Include="Canvas.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HTMLtoUI_Daemon.cpp">
       <Filter>Source Files\DAEMON</Filter>
     </ClCompile>
     <ClCompile Include="HTMLUI.cpp">
       <Filter>Source Files\UI\HTMLUI</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
     <ClCompile Include="Label.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

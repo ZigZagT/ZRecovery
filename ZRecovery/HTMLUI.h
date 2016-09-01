@@ -4,6 +4,7 @@
 #include "katana.h"
 #include "UIBase.h"
 #include "HTMLtoUI_Daemon.h"
+#include "string_man.h"
 
 template <typename>
 class HTMLUI;
@@ -37,19 +38,6 @@ public:
 	}
 	static void register_event_handler(std::string handler_id, IUIElement::EventHandler handler) {
 		_event_handler_registry.insert(std::make_pair(handler_id, handler));
-	}
-	static bool case_insensitive_compare(std::string s1, std::string s2) {
-		return _stricmp(s1.c_str(), s2.c_str()) == 0;
-		//if (s1.length() == s2.length()) {
-		//	return std::equal(s1.begin(), s1.end(),
-		//		s2.begin(), [](char a, char b) {
-		//		std::locale loc;
-		//		return std::tolower(a, loc) == std::tolower(b, loc);
-		//	});
-		//}
-		//else {
-		//	return false;
-		//}
 	}
 private:
 	static std::map<std::string, IUIElement::EventHandler> _event_handler_registry;
@@ -119,7 +107,7 @@ public:
 
 		for (size_t i = 0; i < attr_vector.length; ++i) {
 			auto attr = *(GumboAttribute*)attr_vector.data[i];
-			auto select = std::bind(HTMLUI_TypeInfo::case_insensitive_compare, attr.name, std::placeholders::_1);
+			auto select = std::bind(case_insensitive_compare, attr.name, std::placeholders::_1);
 			add_attr_start()
 				add_attr_int(x)
 				add_attr_int(y)
@@ -164,7 +152,7 @@ public:
 		{
 			for (size_t i = 0; i < katana.declarations->length; ++i) {
 				auto dec = static_cast<KatanaDeclaration*>(katana.declarations->data[i]);
-				auto select = std::bind(HTMLUI_TypeInfo::case_insensitive_compare, dec->property, std::placeholders::_1);
+				auto select = std::bind(case_insensitive_compare, dec->property, std::placeholders::_1);
 				add_attr_start()
 					add_attr_cast_to_int(width, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
 					add_attr_cast_to_int(height, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
@@ -280,7 +268,7 @@ public:
 		std::wstring name_w(output, len);
 		delete output;
 
-		return name_w;
+		return trim_copy(name_w);
 	}
 	std::vector<std::string> classes;
 
@@ -388,9 +376,9 @@ private:
 			{
 				std::string href;
 				auto rel = gumbo_get_attribute(&(node->v.element.attributes), "rel");
-				if (rel && HTMLUI_TypeInfo::case_insensitive_compare(rel->value, "stylesheet")) {
+				if (rel && case_insensitive_compare(rel->value, "stylesheet")) {
 					auto type = gumbo_get_attribute(&(node->v.element.attributes), "type");
-					if (type && HTMLUI_TypeInfo::case_insensitive_compare(type->value, "text/css")) {
+					if (type && case_insensitive_compare(type->value, "text/css")) {
 						href = gumbo_get_attribute(&(node->v.element.attributes), "href")->value;
 					}
 				}
@@ -453,9 +441,9 @@ private:
 			for (auto& info : HTMLUI_TypeInfo::ui_typeinfo_set) {
 				target_ui_type_info = &info;
 				for (auto& attr : info.match_attributes) {
-					if (HTMLUI_TypeInfo::case_insensitive_compare("tag", attr.first)) {
+					if (case_insensitive_compare("tag", attr.first)) {
 #define match_tag(tag_name, gumbo_tag_value) case gumbo_tag_value: { \
-	if (HTMLUI_TypeInfo::case_insensitive_compare( #tag_name , attr.second)) { goto match; \
+	if (case_insensitive_compare( #tag_name , attr.second)) { goto match; \
 	} \
 	break; \
 }
@@ -470,7 +458,7 @@ private:
 #undef match_tag
 					}
 					auto gumbo_attr = gumbo_get_attribute(&(node->v.element.attributes), attr.first.c_str());
-					if (gumbo_attr != NULL && HTMLUI_TypeInfo::case_insensitive_compare(gumbo_attr->value, attr.second)) {
+					if (gumbo_attr != NULL && case_insensitive_compare(gumbo_attr->value, attr.second)) {
 						goto match;
 					}
 				}
