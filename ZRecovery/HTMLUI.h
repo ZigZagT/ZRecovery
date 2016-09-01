@@ -108,6 +108,13 @@ public:
 #define add_attr_int(attr_name) else if (select(#attr_name)) { \
 		attr_name = std::stoi(attr.value); \
 	}
+#define push_class_name() else if (select("class")) { \
+						classes.push_back(attr.value); \
+						for (auto& c : classes.back()) { \
+							c = tolower(c); \
+						} \
+	}
+
 #define add_attr_end() ;
 
 		for (size_t i = 0; i < attr_vector.length; ++i) {
@@ -127,9 +134,11 @@ public:
 				add_attr_str(src)
 				add_attr_str(name)
 				add_attr_str2(text, name)
+
+				push_class_name()
 			add_attr_end()
 		}
-
+#undef push_class_name
 #undef add_attr_start
 #undef add_attr_str
 #undef add_attr_str2
@@ -184,7 +193,7 @@ public:
 	bool can_create = false;
 	HWND parent = NULL;
 	HTMLUI_TypeInfo* typeinfo;
-	HTMLUI_UINode* node;
+	//HTMLUI_UINode* node;
 	std::map<std::string, IUIElement::EventHandler> event_handler;
 	int id;
 	RECT position() {
@@ -273,12 +282,14 @@ public:
 
 		return name_w;
 	}
+	std::vector<std::string> classes;
 
 };
 
 class IHTMLUI {
 public :
 	virtual void bind_event_handler(std::string event_name, IUIElement::EventHandler handler) = 0;
+	//virtual std::type_index get_type_info() = 0;
 };
 
 template <typename UIType>
@@ -288,6 +299,10 @@ public:
 	static HTMLUI_TypeInfo::UIConstructor& create_from_html;
 	static HTMLUI_TypeInfo::UIMatchAttrMap& match_attributes;
 	static HTMLUI_TypeInfo::UISupportedEventsSet& supported_events;
+	//virtual std::type_index get_type_info() override
+	//{
+	//	return typeid(UIType);
+	//}
 private:
 	static void HTMLtoUI_Enable() {
 		create_from_html;
@@ -394,60 +409,75 @@ private:
 				if (style) {
 					auto katana = katana_parse(style->value, strlen(style->value), KatanaParserModeDeclarationList);
 					current->descriptor.update(*katana);
-					for (size_t i = 0; i < katana->errors.length; ++i) {
-						// TODO: log
-						Alert(static_cast<KatanaError*>(katana->errors.data[i])->message);
-					}
-					if (katana->errors.length > 0) {
-						Alert("Katana error!");
-						break;
-					}
-					std::ostringstream oss;
-					oss << std::boolalpha;
-					oss << "StyleSheet Content: \n\t" << style->value << std::endl << std::endl << "Katana Output: \n";
-					for (size_t i = 0; i < katana->declarations->length; ++i) {
-						auto dec = static_cast<KatanaDeclaration*>(katana->declarations->data[i]);
-						oss << "\t" << "important: " << dec->important << std::endl;
-						oss << "\t" << "property: " << dec->property << std::endl;
-						oss << "\t" << "raw: " << dec->raw << std::endl;
-						//oss << "\t" << "string: " << dec->string << std::endl;
-						oss << "\t" << "values: " << std::endl;
+					//for (size_t i = 0; i < katana->errors.length; ++i) {
+					//	// TODO: log
+					//	Alert(static_cast<KatanaError*>(katana->errors.data[i])->message);
+					//}
+					//if (katana->errors.length > 0) {
+					//	Alert("Katana error!");
+					//	break;
+					//}
+					//std::ostringstream oss;
+					//oss << std::boolalpha;
+					//oss << "StyleSheet Content: \n\t" << style->value << std::endl << std::endl << "Katana Output: \n";
+					//for (size_t i = 0; i < katana->declarations->length; ++i) {
+					//	auto dec = static_cast<KatanaDeclaration*>(katana->declarations->data[i]);
+					//	oss << "\t" << "important: " << dec->important << std::endl;
+					//	oss << "\t" << "property: " << dec->property << std::endl;
+					//	oss << "\t" << "raw: " << dec->raw << std::endl;
+					//	//oss << "\t" << "string: " << dec->string << std::endl;
+					//	oss << "\t" << "values: " << std::endl;
 
-						for (size_t ii = 0; ii < dec->values->length; ++ii) {
-							auto val = static_cast<KatanaValue*>(dec->values->data[ii]);
-							oss << "\t\t" << "index: " << ii << std::endl;
-							oss << "\t\t" << "id: " << val->id << std::endl;
-							oss << "\t\t" << "raw: " << val->raw << std::endl;
-							oss << "\t\t" << "unit: " << val->unit << std::endl;
-							if (val->isInt) {
-								oss << "\t\t" << "int value: " << val->iValue << std::endl;
-							}
-							oss << "\t\t" << "try int value: " << val->iValue << std::endl;
-							oss << "\t\t" << "try double value: " << val->fValue << std::endl;
-							//oss << "\t\t" << "try string value: " << val->string << std::endl;
-						}
-						oss << "=======================================" << std::endl;
-					}
-					oss << std::flush;
-					Alert(oss.str());
-					// auto& stylesheet = katana->stylesheet;
+					//	for (size_t ii = 0; ii < dec->values->length; ++ii) {
+					//		auto val = static_cast<KatanaValue*>(dec->values->data[ii]);
+					//		oss << "\t\t" << "index: " << ii << std::endl;
+					//		oss << "\t\t" << "id: " << val->id << std::endl;
+					//		oss << "\t\t" << "raw: " << val->raw << std::endl;
+					//		oss << "\t\t" << "unit: " << val->unit << std::endl;
+					//		if (val->isInt) {
+					//			oss << "\t\t" << "int value: " << val->iValue << std::endl;
+					//		}
+					//		oss << "\t\t" << "try int value: " << val->iValue << std::endl;
+					//		oss << "\t\t" << "try double value: " << val->fValue << std::endl;
+					//		//oss << "\t\t" << "try string value: " << val->string << std::endl;
+					//	}
+					//	oss << "=======================================" << std::endl;
+					//}
+					//oss << std::flush;
+					//Alert(oss.str());
 				}
 				break;
 			}
 
 			HTMLUI_TypeInfo* target_ui_type_info;
 			for (auto& info : HTMLUI_TypeInfo::ui_typeinfo_set) {
+				target_ui_type_info = &info;
 				for (auto& attr : info.match_attributes) {
+					if (HTMLUI_TypeInfo::case_insensitive_compare("tag", attr.first)) {
+#define match_tag(tag_name, gumbo_tag_value) case gumbo_tag_value: { \
+	if (HTMLUI_TypeInfo::case_insensitive_compare( #tag_name , attr.second)) { goto match; \
+	} \
+	break; \
+}
+						switch (node->v.element.tag)
+						{
+							match_tag(button, GUMBO_TAG_BUTTON)
+							match_tag(div, GUMBO_TAG_DIV)
+							match_tag(p, GUMBO_TAG_P)
+						default:
+							break;
+						}
+#undef match_tag
+					}
 					auto gumbo_attr = gumbo_get_attribute(&(node->v.element.attributes), attr.first.c_str());
 					if (gumbo_attr != NULL && HTMLUI_TypeInfo::case_insensitive_compare(gumbo_attr->value, attr.second)) {
-						target_ui_type_info = &info;
 						goto match;
 					}
 				}
 			}
 			break;
 		match:
-			current->descriptor.node = current;
+			//current->descriptor.node = current;
 			current->descriptor.update(node->v.element.attributes);
 			current->descriptor.id = node->v.element.start_pos.offset;
 			current->descriptor.typeinfo = target_ui_type_info;

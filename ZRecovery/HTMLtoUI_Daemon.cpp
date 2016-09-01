@@ -8,6 +8,8 @@ HTMLtoUI_Daemon::HTMLtoUI_Daemon()
 {
 	Button::HTMLtoUI_Enable();
 	Canvas::HTMLtoUI_Enable();
+	Label::HTMLtoUI_Enable();
+	Tab::HTMLtoUI_Enable();
 }
 
 

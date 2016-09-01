@@ -2,8 +2,9 @@
 #include "stdafx.h"
 #include "ControlBase.h"
 #include "Canvas.h"
+#include "HTMLUI.h"
 
-class Tab : public ControlBase, public IUIContainer<Canvas>
+class Tab : public ControlBase, public IUIContainer<Canvas>, public HTMLUI<Tab>
 {
 	typedef struct {
 		TCITEMHEADER header;
@@ -45,5 +46,12 @@ public:
 	virtual void erase(size_t index) override;
 	virtual Canvas & back() override;
 	virtual Canvas & front() override;
+
+	// Inherited via HTMLUI
+public:
+	virtual void bind_event_handler(std::string event_name, IUIElement::EventHandler handler) override;
+	static HTMLUI_TypeInfo::UIConstructor create_from_html;
+	static HTMLUI_TypeInfo::UIMatchAttrMap match_attributes;
+	static HTMLUI_TypeInfo::UISupportedEventsSet supported_events;
 };
 

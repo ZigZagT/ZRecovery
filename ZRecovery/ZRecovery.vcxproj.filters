@@ -182,6 +182,9 @@
     <ClCompile Include="HTMLUI.cpp">
       <Filter>Source Files\UI\HTMLUI</Filter>
     </ClCompile>
+    <ClCompile Include="Label.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ZRecovery.rc">

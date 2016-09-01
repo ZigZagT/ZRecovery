@@ -132,3 +132,35 @@ Canvas & Tab::front()
 {
 	return _tab_content.front();
 }
+
+void Tab::bind_event_handler(std::string event_name, IUIElement::EventHandler handler)
+{
+}
+
+HTMLUI_TypeInfo::UIConstructor Tab::create_from_html = [](HTMLUI_UIDescriptor& des) -> std::shared_ptr<UIBase> {
+	DWORD style = 0;
+	if (des.border) {
+		style |= WS_BORDER;
+	}
+	std::shared_ptr<UIBase> ret;
+	if (std::find(des.classes.begin(), des.classes.end(), "tab-item") != des.classes.end()) {
+		//auto node = des.node;
+		//while (!node->parent->descriptor.can_create | !dynamic_cast<IHTMLUI*>(node->parent->ui.get())->get_type_info == typeid(Tab)) {
+		//	node = node->parent;
+		//}
+		//auto& tab = *dynamic_cast<Tab*>(node->ui.get());
+		auto& tab = *dynamic_cast<Tab*>(UIBase::query_window_s(des.parent));
+		tab.insert(des.nameW());
+		ret = std::shared_ptr<UIBase>(&tab.back(), [](auto) {});
+	}
+	else {
+		ret = std::shared_ptr<UIBase>(new Tab(des.parent, des.position(), style), [](auto& p) {delete (Tab*)p; });
+		ret->create();
+	}
+	return ret;
+};
+HTMLUI_TypeInfo::UIMatchAttrMap Tab::match_attributes{
+	{ "class", "tab" },
+	{ "class", "tab-item"}
+};
+HTMLUI_TypeInfo::UISupportedEventsSet Tab::supported_events;

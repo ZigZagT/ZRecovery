@@ -53,6 +53,7 @@
 #include <locale>
 #include <fstream>
 #include <sstream>
+#include <typeindex>
 
 // COM Header Files
 #include <Objbase.h>

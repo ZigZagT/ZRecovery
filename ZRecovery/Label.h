@@ -2,8 +2,9 @@
 #include "stdafx.h"
 #include "ControlBase.h"
 #include "Debug.h"
+#include "HTMLUI.h"
 
-class Label : public ControlBase {
+class Label : public ControlBase, public HTMLUI<Label> {
 public:
 	Label(
 		HWND parent,
@@ -24,4 +25,11 @@ private:
 			return DefWindowProc(_hwnd, uMsg, wParam, lParam);
 		}
 	}
+
+	// Inherited via HTMLUI
+public:
+	virtual void bind_event_handler(std::string event_name, IUIElement::EventHandler handler) override;
+	static HTMLUI_TypeInfo::UIConstructor create_from_html;
+	static HTMLUI_TypeInfo::UIMatchAttrMap match_attributes;
+	static HTMLUI_TypeInfo::UISupportedEventsSet supported_events;
 };
