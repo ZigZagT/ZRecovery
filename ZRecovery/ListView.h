@@ -1,5 +1,6 @@
 #pragma once
 #include "ControlBase.h"
+#include "HTMLUI.h"
 
 class ListViewItem {
 public:
@@ -13,7 +14,7 @@ public:
 	std::vector<std::wstring> colomns;
 };
 
-class ListView : public ControlBase, public IUIContainer<ListViewItem>
+class ListView : public ControlBase, public IUIContainer<ListViewItem>, public HTMLUI<ListView>
 {
 public:
 	enum style_t {
@@ -36,9 +37,9 @@ public:
 	void setStyle(style_t s);
 	void insert(ListViewItem& item);
 	template <typename... Types>
-	void setColumns(std::wstring col, Types... others) {
+	void setColumns(std::wstring&& col, Types&&... others) {
 		clearColumns();
-		_insertColumns<Types...>(col, others...);
+		_insertColumns<Types...>(std::forward<std::wstring&&>(col), std::forward<Types>(others)...);
 	}
 	template <typename ContainerT>
 	void setColumns(ContainerT cols) {
@@ -46,7 +47,12 @@ public:
 			_insertColumns(str);
 		}
 	}
+	template <typename... Types>
+	void insertColumn(std::wstring&& col, Types&&... others) {
+		_insertColumns<Types...>(std::forward<std::wstring&&>(col), std::forward<Types>(others)...);
+	}
 
+	virtual void refresh();
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg)
 		{
@@ -117,7 +123,7 @@ private:
 		}
 	}
 	template<typename... Types>
-	void _insertColumns(std::wstring col, Types... others) {
+	void _insertColumns(std::wstring&& col, Types&&... others) {
 		LVCOLUMN lv_col;
 		lv_col.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_FMT | LVCF_SUBITEM;
 		lv_col.fmt = LVCFMT_LEFT;
@@ -127,9 +133,16 @@ private:
 		ListView_InsertColumn(_hwnd, _col_count, &lv_col);
 		++_col_count;
 
-		_insertColumns(others...);
+		_insertColumns(std::forward<Types>(others)...);
 	}
 	void _insertColumns() {
 		return;
 	}
+
+	// Inherited via HTMLUI
+public:
+	virtual void bind_event_handler(std::string event_name, IUIElement::EventHandler handler) override;
+	static HTMLUI_TypeInfo::UIConstructor create_from_html;
+	static HTMLUI_TypeInfo::UIMatchAttrMap match_attributes;
+	static HTMLUI_TypeInfo::UISupportedEventsSet supported_events;
 };

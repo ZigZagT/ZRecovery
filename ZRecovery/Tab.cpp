@@ -143,12 +143,7 @@ HTMLUI_TypeInfo::UIConstructor Tab::create_from_html = [](HTMLUI_UIDescriptor& d
 		style |= WS_BORDER;
 	}
 	std::shared_ptr<UIBase> ret;
-	if (std::find(des.classes.begin(), des.classes.end(), "tab-item") != des.classes.end()) {
-		//auto node = des.node;
-		//while (!node->parent->descriptor.can_create | !dynamic_cast<IHTMLUI*>(node->parent->ui.get())->get_type_info == typeid(Tab)) {
-		//	node = node->parent;
-		//}
-		//auto& tab = *dynamic_cast<Tab*>(node->ui.get());
+	if (std::find(des.classes.begin(), des.classes.end(), "TAB-ITEM") != des.classes.end()) {
 		auto& tab = *dynamic_cast<Tab*>(UIBase::query_window_s(des.parent));
 		tab.insert(des.nameW());
 		ret = std::shared_ptr<UIBase>(&tab.back(), [](auto) {});
