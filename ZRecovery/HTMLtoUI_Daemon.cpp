@@ -10,6 +10,7 @@ HTMLtoUI_Daemon::HTMLtoUI_Daemon()
 	Canvas::HTMLtoUI_Enable();
 	Label::HTMLtoUI_Enable();
 	Tab::HTMLtoUI_Enable();
+	TextBox::HTMLtoUI_Enable();
 }
 
 
