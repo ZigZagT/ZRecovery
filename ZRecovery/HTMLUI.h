@@ -65,6 +65,7 @@ private:
 };
 
 class HTMLUI_UIDescriptor {
+
 public:
 	template<typename T>
 	class Nullable : public std::unique_ptr<T> {
@@ -96,10 +97,6 @@ public:
 		bool is_null = true;
 	};
 	HTMLUI_UIDescriptor() {}
-	HTMLUI_UIDescriptor(GumboVector& attr_vector) {
-		update(attr_vector);
-	}
-
 	void update(GumboVector& attr_vector) {
 #define add_attr_start() if(false) {}
 #define add_attr_str(attr_name) else if (select(#attr_name)) { \
@@ -116,7 +113,6 @@ public:
 		for (size_t i = 0; i < attr_vector.length; ++i) {
 			auto attr = *(GumboAttribute*)attr_vector.data[i];
 			auto select = std::bind(HTMLUI_TypeInfo::case_insensitive_compare, attr.name, std::placeholders::_1);
-
 			add_attr_start()
 				add_attr_int(x)
 				add_attr_int(y)
@@ -131,7 +127,7 @@ public:
 				add_attr_str(src)
 				add_attr_str(name)
 				add_attr_str2(text, name)
-				add_attr_end()
+			add_attr_end()
 		}
 
 #undef add_attr_start
@@ -140,13 +136,64 @@ public:
 #undef add_attr_int
 #undef add_attr_end
 	}
+	void update(KatanaOutput& katana) {
+#define add_attr_start() if(false) {}
+#define add_attr_str(attr_name, value) else if (select(#attr_name)) { \
+						attr_name = value; \
+	}
+#define add_attr_cast_to_int(attr_name, value) else if (select(#attr_name)) { \
+						attr_name = static_cast<int>(value); \
+	}
+#define add_attr_end() ;
+		if (katana.errors.length > 0) {
+			return;
+		}
+
+		switch (katana.mode)
+		{
+		case KatanaParserModeDeclarationList:
+		{
+			for (size_t i = 0; i < katana.declarations->length; ++i) {
+				auto dec = static_cast<KatanaDeclaration*>(katana.declarations->data[i]);
+				auto select = std::bind(HTMLUI_TypeInfo::case_insensitive_compare, dec->property, std::placeholders::_1);
+				add_attr_start()
+					add_attr_cast_to_int(width, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
+					add_attr_cast_to_int(height, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
+					add_attr_cast_to_int(left, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
+					add_attr_cast_to_int(top, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
+					add_attr_cast_to_int(right, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
+					add_attr_cast_to_int(bottom, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
+					add_attr_cast_to_int(border, static_cast<KatanaValue*>(dec->values->data[0])->fValue)
+				add_attr_end()
+			}
+			break;
+		}
+		case KatanaParserModeStylesheet:
+		case KatanaParserModeRule:
+		case KatanaParserModeKeyframeRule:
+		case KatanaParserModeKeyframeKeyList:
+		case KatanaParserModeMediaList:
+		case KatanaParserModeValue:
+		case KatanaParserModeSelector:
+		default:
+			// TODO: support more css style
+			break;
+		}
+	}
 
 	bool can_create = false;
 	HWND parent = NULL;
 	HTMLUI_TypeInfo* typeinfo;
+	HTMLUI_UINode* node;
 	std::map<std::string, IUIElement::EventHandler> event_handler;
 	int id;
 	RECT position() {
+		if (parent != NULL) {
+			RECT rc;
+			GetClientRect(parent, &rc);
+			return position(rc);
+		}
+		// this version of position will treat the right and bottom as the position right and bottom edge
 		RECT pos;
 		pos.left = left ? left.val() : 0;
 		pos.top = top ? top.val() : 0;
@@ -160,13 +207,47 @@ public:
 
 		return pos;
 	}
+	RECT position(RECT& client_area) {
+		// this version of position will treat the right and bottom as the distance of the right and bottom edge to the client area edge.
+		RECT pos = client_area;
+
+		pos.left = left ? client_area.left + left.val() : client_area.left;
+		pos.top = top ? client_area.top + top.val() : client_area.top;
+		pos.right = right ? client_area.right - right.val() : client_area.right;
+		pos.bottom = bottom ? client_area.bottom - bottom.val() : client_area.bottom;
+
+		if (!left && x) {
+			pos.left = x.val();
+		}
+		if (!top && y) {
+			pos.top = y.val();
+		}
+		if (left | x && !right && width) {
+			pos.right = pos.left + width.val();
+		}
+		if (top | y && !bottom && height) {
+			pos.bottom = pos.top + height.val();
+		}
+		if (!left && !x && right && width) {
+			pos.left = pos.right - width.val();
+		}
+		if (!top && !y && bottom && height) {
+			pos.top = pos.bottom - height.val();
+		}
+		if (!left && !top && !right && !bottom && !x && !y) {
+			pos.right = width ? pos.left + width.val() : pos.right;
+			pos.bottom = height ? pos.top + height.val() : pos.bottom;
+		}
+
+		return pos;
+	}
 	std::string identifer(std::string prefix) {
 		std::string sp = "::";
 		return prefix + sp + name.val() + sp + std::to_string(id);
 	}
 	std::wstring identifer(std::wstring prefix) {
 		std::wstring sp = L"::";
-		return prefix + sp + wide_name() + sp + std::to_wstring(id);
+		return prefix + sp + nameW() + sp + std::to_wstring(id);
 	}
 
 	Nullable<long> height;
@@ -183,15 +264,16 @@ public:
 
 	Nullable<std::string> src;
 	Nullable<std::string> name;
-	std::wstring wide_name() {
+	std::wstring nameW() {
 		auto size = (sizeof(wchar_t) * name.val().length() + 1) / sizeof(wchar_t);
 		wchar_t* output = new wchar_t[size];
 		auto len = MultiByteToWideChar(CP_UTF8, 0, name.val().data(), static_cast<int>(name.val().length()), output, static_cast<int>(size));
-		std::wstring nameW(output, len);
+		std::wstring name_w(output, len);
 		delete output;
 
-		return nameW;
+		return name_w;
 	}
+
 };
 
 class IHTMLUI {
@@ -311,6 +393,7 @@ private:
 				auto style = gumbo_get_attribute(&(node->v.element.attributes), "style");
 				if (style) {
 					auto katana = katana_parse(style->value, strlen(style->value), KatanaParserModeDeclarationList);
+					current->descriptor.update(*katana);
 					for (size_t i = 0; i < katana->errors.length; ++i) {
 						// TODO: log
 						Alert(static_cast<KatanaError*>(katana->errors.data[i])->message);
@@ -332,6 +415,7 @@ private:
 
 						for (size_t ii = 0; ii < dec->values->length; ++ii) {
 							auto val = static_cast<KatanaValue*>(dec->values->data[ii]);
+							oss << "\t\t" << "index: " << ii << std::endl;
 							oss << "\t\t" << "id: " << val->id << std::endl;
 							oss << "\t\t" << "raw: " << val->raw << std::endl;
 							oss << "\t\t" << "unit: " << val->unit << std::endl;
@@ -344,7 +428,6 @@ private:
 						}
 						oss << "=======================================" << std::endl;
 					}
-
 					oss << std::flush;
 					Alert(oss.str());
 					// auto& stylesheet = katana->stylesheet;
@@ -364,6 +447,7 @@ private:
 			}
 			break;
 		match:
+			current->descriptor.node = current;
 			current->descriptor.update(node->v.element.attributes);
 			current->descriptor.id = node->v.element.start_pos.offset;
 			current->descriptor.typeinfo = target_ui_type_info;
