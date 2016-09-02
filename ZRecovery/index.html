@@ -1,23 +1,39 @@
 <HTML>
 <HEAD>
     <META NAME="GENERATOR" Content="Microsoft Visual Studio">
-    <TITLE></TITLE>
+    <TITLE>HTMLUI Template</TITLE>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+    <style>
+        * {
+            position: absolute;
+            font-size: 15px;
+        }
+        .tab-item {
+            display: none;
+        }
+        .tab_label:hover {
+            background-color: gainsboro;
+        }
+    </style>
 </HEAD>
-<BODY>
+<BODY style="position: fixed;">
 
-    <div class="canvas" top="10" left="10" right="10" bottom="10" border="1">
-        <button class="button" x="10" y="10" width="100" height="30" onclick="html_button_click">Button 1</button>
-        <button class="button" x="150" y="10" width="100" height="30" onclick="html_button_click">Button 2</button>
+    <!--div class="canvas" top="10" left="10" right="10" bottom="10" border="1"-->
+    <div class="canvas" style="position:fixed; border: solid thin; top:10px; left:10px; right:10px; bottom:10px;">
+        <button class="button" style="left:10px; top:10px; width:100px; height:30px;" onclick="html_button_click">Button 1</button>
+        <button class="button" style="left:150px; top:10px; width:100px; height:30px;" onclick="html_button_click">Button 2</button>
         <button class="button" style="width: 100px; height: 30px; right: 10px; bottom: 10px;">right bottom</button>
-        <div class="tab" style="bottom: 0; left: 0; width: 500px; height: 300px;">
-            <div class="tab-item">Tab1 - TextBox (input)
-            <input left="10" top="10" width="150" height="20" type="text" border="1" />
+        <div class="tab" style="bottom: 0; left: 0; width: 500px; height: 300px; border:solid thin">
+            <div class="tab-item">TextBox (input)
+                <input left="10" top="10" width="150" height="20" type="text" border="1" />
             </div>
-            <div class="tab-item">
-            Tab2 - Button
-            <button style="right: 10px; bottom: 10px; width: 100px; height: 30px">Tab Button</button></div>
-            <div class="tab-item" name="Tab3 - Label (p)"><p style="top:120px;bottom:120px;left:70px;right:70px;" border="1">Hello World!</p></div>
-            <div class="tab-item">Tab4 - ListView (table)
+            <div class="tab-item" text="Button">
+                <button style="right: 10px; bottom: 10px; width: 100px; height: 30px">Tab Button</button>
+            </div>
+            <div class="tab-item" name="Label (p)">
+                <p style="top:120px;bottom:120px;left:70px;right:70px;" border="1">Hello World!</p>
+            </div>
+            <div class="tab-item">ListView (table)
                 <table style="left:5px;top:5px;right:5px;bottom:5px;">
                     <tr><th>Name</th><th>Col 1</th><th>Col 2</th></tr>
                     <tr><td>Hello</td><td>World</td><td>!</td></tr>
@@ -27,6 +43,55 @@
             </div>
         </div>
     </div>
-
+    <script>
+        $(".tab").prepend(function () {
+            var tab_names = [];
+            $tab = $(this);
+            $tab.children(".tab-item").each(function (index, element) {
+                var $element = $(element);
+                $element.css("position", "absolute").css("left", "0").css("top", "0").css("right", "0").css("bottom", "0");
+                tab_names[index] = $element.attr("name");
+                if (typeof tab_names[index] == "undefined") {
+                    tab_names[index] = $element.attr("text");
+                }
+                if (typeof tab_names[index] == "undefined") {
+                    $element.contents().each(function (ii, ele) {
+                        if (ele.nodeType == Node.TEXT_NODE && ele.textContent.trim().length !== 0) {
+                            tab_names[index] = ele.textContent.trim();
+                            ele.textContent = "";
+                        }
+                    })
+                }
+            });
+            $children = $tab.children();
+            $tab.empty();
+            var $title = $("<div></div>");
+            var $pages = $("<div></div>");
+            $pages.append($children);
+            $tab.append($pages);
+            $title.css("position", "relative").css("overflow", "hidden").css("height", "16px").css("border-bottom", "solid thin");
+            $pages.css("position", "absolute").css("left", "0").css("top", "21px").css("right", "0").css("bottom", "0");
+            tab_names.forEach(function (val, i) {
+                var $tab_label = $("<div></div>");
+                $tab_label.css("position", "relative").css("height", "15px").css("line-height", "15px").css("float", "left").css("cursor", "default").css("border-right", "solid thin");
+                $tab_label.html(val);
+                $tab_label.addClass("tab_label");
+                $tab_label.on("click", function () {
+                    $pages.children(".tab-item").each(function (index, element) {
+                        if (index == i) {
+                            $(element).show();
+                        } else {
+                            $(element).hide();
+                        }
+                    })
+                });
+                $title.append($tab_label);
+                if (i == 0) {
+                    $tab_label.click();
+                }
+            });
+            return $title;
+        });
+    </script>
 </BODY>
 </HTML>

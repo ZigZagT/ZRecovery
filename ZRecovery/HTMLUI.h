@@ -1393,7 +1393,9 @@ private:
 		}
 		case GUMBO_NODE_TEXT:
 		{
-			current->parent->descriptor.name = node->v.text.text;
+			if (!current->parent->descriptor.name) {
+				current->parent->descriptor.name = node->v.text.text;
+			}
 			auto bak = current->parent->children.back();
 			current->parent->children.pop_back();
 			return;
