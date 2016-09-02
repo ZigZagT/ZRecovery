@@ -16,7 +16,9 @@ public:
 		_class_name = className;
 	}
 	Canvas(Canvas&& old) noexcept = default;
-	virtual ~Canvas() {}
+	virtual ~Canvas() {
+		destroy();
+	}
 
 
 protected:

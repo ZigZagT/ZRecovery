@@ -24,6 +24,9 @@ public:
 		GetClientRect(_parent, &rc);
 		_position = rc;
 	}
+	virtual ~Tab() {
+		destroy();
+	}
 		
 	void insert(std::wstring name);
 	Canvas& at(size_t index);
@@ -38,6 +41,7 @@ private:
 	// Override IUIElement
 public:
 	virtual void create();
+	virtual void destroy();
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	// Inherited via IUIContainer

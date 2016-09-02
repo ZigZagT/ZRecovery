@@ -14,7 +14,9 @@ public:
 		_class_name = className;
 	}
 	SolidWindow(SolidWindow&&) noexcept = default;
-
+	virtual ~SolidWindow() {
+		destroy();
+	}
 
 protected:
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);

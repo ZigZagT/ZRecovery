@@ -38,8 +38,12 @@ Canvas& Tab::operator[](size_t index) {
 
 void Tab::create()
 {
-	baseCreate();
+	ControlBase::create();
 	SendMessage(_hwnd, TCM_SETITEMEXTRA, (WPARAM)sizeof(void*), 0);
+}
+
+void Tab::destroy() {
+	ControlBase::destroy();
 }
 
 LRESULT Tab::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {

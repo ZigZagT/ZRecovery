@@ -24,6 +24,10 @@ public:
 	{
 		_class_name = L"EDIT";
 	}
+	virtual ~TextBox() {
+		destroy();
+	}
+
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg)
 		{
@@ -51,7 +55,6 @@ public:
 		}
 	}
 
-	virtual ~TextBox() {}
 	
 	std::wstring getText() {
 		static const size_t len = 256;

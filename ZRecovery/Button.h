@@ -16,6 +16,13 @@ public:
 	{
 		_class_name = L"BUTTON";
 	}
+	Button(Button&& old) noexcept :
+		ControlBase(std::move(old)),
+		onClick(std::move(old.onClick))
+	{}
+	virtual ~Button() {
+		destroy();
+	}
 
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg)

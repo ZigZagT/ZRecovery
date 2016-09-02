@@ -28,10 +28,8 @@ public:
 	{
 		SetWindowLongPtr(_hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 	}
-	~WindowBase() {
-		if (_is_valid) {
-			UnregisterClass(_class_name.c_str(), _instance);
-		}
+	virtual ~WindowBase() {
+		destroy();
 	}
 
 	void setTitle(std::wstring title) { setText(title); }
@@ -49,6 +47,12 @@ private:
 		}
 		else {
 			pThis = reinterpret_cast<WindowBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+			try {
+				query_window_s(hwnd);
+			}
+			catch (std::out_of_range) {
+				return DefWindowProc(hwnd, uMsg, wParam, lParam);
+			}
 		}
 
 		if (pThis) {
@@ -70,7 +74,13 @@ public:
 		updateClass(wc);
 		RegisterClassExW(&wc);
 
-		baseCreate();
+		UIBase::create();
+	}
+	virtual void destroy() {
+		if (_is_valid) {
+			UIBase::destroy();
+			UnregisterClass(_class_name.c_str(), _instance);
+		}
 	}
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 
@@ -96,7 +106,13 @@ public:
 			if (_children.find(nmhdr.hwndFrom) == _children.end()) {
 				goto defaultHandleMessage;
 			}
-			auto wnd = query_window(nmhdr.hwndFrom);
+			IUIElement* wnd;
+			try {
+				wnd = query_window(nmhdr.hwndFrom);
+			}
+			catch (std::out_of_range) {
+				goto defaultHandleMessage;
+			}
 			std::map<UINT, std::string> code;
 			code[NM_CLICK] = "NM_CLICK";
 			code[TCN_FOCUSCHANGE] = "TCN_FOCUSCHANGE";
@@ -133,7 +149,7 @@ public:
 			goto defaultHandleMessage;
 		}
 	defaultHandleMessage:
-		return handleMessage(uMsg, wParam, lParam);
+		return this->handleMessage(uMsg, wParam, lParam);
 	}
 	virtual void updateClass(WNDCLASSEXW& wc) = 0;
 };

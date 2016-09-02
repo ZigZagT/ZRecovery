@@ -172,10 +172,8 @@
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="ControlBase.h" />
-    <ClInclude Include="DialogBase.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="ListView.h" />
-    <ClInclude Include="ModelessDialog.h" />
     <ClInclude Include="string_man.h" />
     <ClInclude Include="Tab.h" />
     <ClInclude Include="TextBox.h" />
@@ -184,6 +182,7 @@
     <ClInclude Include="Label.h" />
     <ClInclude Include="HTMLUI.h" />
     <ClInclude Include="HTMLtoUI_Daemon.h" />
+    <ClInclude Include="UIDemo.h" />
     <ClInclude Include="WindowBase.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CommonControl_Daemon.h" />
@@ -204,7 +203,6 @@
     <ClCompile Include="CommonControl_Daemon.cpp" />
     <ClCompile Include="COM_Daemon.cpp" />
     <ClCompile Include="Canvas.cpp" />
-    <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="HTMLUI.cpp" />
     <ClCompile Include="Label.cpp" />
@@ -221,6 +219,7 @@
     <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="HTMLtoUI_Daemon.cpp" />
+    <ClCompile Include="UIDemo.cpp" />
     <ClCompile Include="WIM.cpp" />
     <ClCompile Include="ZRecovery.cpp" />
   </ItemGroup>

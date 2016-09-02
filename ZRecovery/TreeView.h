@@ -4,6 +4,8 @@ class TreeView : public ControlBase
 {
 public:
 	TreeView();
-	virtual ~TreeView();
+	virtual ~TreeView() {
+		destroy();
+	}
 };
 

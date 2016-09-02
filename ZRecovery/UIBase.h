@@ -12,6 +12,7 @@ public:
 	using EventHandler = std::function<void(IUIElement* sender, unsigned long long EventArgs)>;
 
 	virtual void create() = 0;
+	virtual void destroy() = 0;
 	virtual bool isValid() = 0;
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 	virtual HWND getHandler() = 0;
@@ -26,6 +27,8 @@ public:
 	virtual void setText(std::wstring text) = 0;
 	virtual void setFont(HFONT) = 0;
 	virtual void refresh() = 0;
+
+	virtual ~IUIElement() = default;
 };
 
 template <typename ContentType>
@@ -79,19 +82,7 @@ public:
 	}
 
 	virtual ~UIBase() {
-		if (!_is_valid) {
-			return;
-		}
-		unregister_window();
-		DestroyWindow(_hwnd);
-
-		try {
-			if (_parent != NULL) {
-				auto p = query_window(_parent);
-				dynamic_cast<UIBase*>(p)->_children.erase(_hwnd);
-			}
-		}
-		catch (std::out_of_range) {}
+		destroy();
 	};
 
 	virtual std::wstring getName() { return _name; }
@@ -112,7 +103,12 @@ protected:
 	LPCTSTR _window_class = NULL;
 	bool _is_valid = false;
 
-	void baseCreate() {
+private:
+	static HFONT _default_font;
+
+	// Implementation of IUIElement
+public:
+	virtual void create() {
 		if (_is_valid) {
 			throw std::runtime_error("already created");
 		}
@@ -158,14 +154,26 @@ protected:
 		}
 		catch (std::out_of_range) {}
 	}
-
-private:
-	static HFONT _default_font;
-
-	// Implementation of IUIElement
-public:
-	virtual void create() {
-		baseCreate();
+	virtual void destroy() {
+		if (!_is_valid) {
+			return;
+		}
+		_is_valid = false;
+		for (auto& child : _children) {
+			auto ui = query_window(child);
+			ui->destroy();
+		}
+		try {
+			if (_parent != NULL) {
+				auto p = query_window(_parent);
+				if (p->isValid()) {
+					dynamic_cast<UIBase*>(p)->_children.erase(_hwnd);
+				}
+			}
+		}
+		catch (std::out_of_range) {}
+		unregister_window();
+		DestroyWindow(_hwnd);
 	}
 	virtual bool isValid() {
 		return _is_valid;
@@ -184,6 +192,11 @@ public:
 		return query_window_s(hwnd);
 	}
 	static IUIElement* query_window_s(HWND hwnd) {
+		//auto it = _window_registry.find(hwnd);
+		//if (it == _window_registry.end()) {
+		//	return nullptr;
+		//}
+		//return it->second;
 		return _window_registry.at(hwnd);
 	}
 

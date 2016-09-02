@@ -15,6 +15,9 @@ public:
 		ControlBase(position, text, WS_CHILD | WS_VISIBLE | SS_CENTER | SS_NOTIFY | style, parent, NULL, NULL) {
 		_class_name = L"STATIC";
 	}
+	virtual ~Label() {
+		destroy();
+	}
 
 private:
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {

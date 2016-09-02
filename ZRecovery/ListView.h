@@ -32,7 +32,9 @@ public:
 		ControlBase(position, text, WS_VISIBLE | WS_CHILD | LVS_REPORT | LVS_SHOWSELALWAYS  | style, parent, NULL, NULL) {
 		_window_class = WC_LISTVIEW;
 	}
-	virtual ~ListView() {}
+	virtual ~ListView() {
+		destroy();
+	}
 
 	void setStyle(style_t s);
 	void insert(ListViewItem& item);
