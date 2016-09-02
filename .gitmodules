@@ -3,7 +3,6 @@
 	url = https://github.com/4Oranges/gumbo-parser
 	branch = vc++x64
 [submodule "katana-parser"]
-
 	path = katana-parser
-
-	url = https://github.com/4Oranges/katana-parser/
+	url = https://github.com/4Oranges/katana-parser
+	branch = master
