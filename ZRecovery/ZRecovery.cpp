@@ -55,7 +55,12 @@ void ZRecovery() {
 	create_resource(HTMLUI_UINode, html_ui);
 
 	HTMLUI_TypeInfo::register_event_handler({
-		{}
+		{"checked", [](auto, auto) {
+			Alert("checked!");
+		}},
+		{"cleared", [](auto, auto) {
+			Alert("cleared!");
+		}}
 	});
 
 	html_ui = HTMLUI_Parser::parse_file("ZRecovery.html");

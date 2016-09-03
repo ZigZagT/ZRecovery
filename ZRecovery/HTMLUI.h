@@ -1066,7 +1066,10 @@ public:
 	//}
 private:
 	static void HTMLtoUI_Enable() {
+		// make sure the members of the template class are created
 		create_from_html;
+		match_attributes;
+		supported_events;
 		type_specified_info;
 	}
 	static HTMLUI_TypeInfo type_specified_info;

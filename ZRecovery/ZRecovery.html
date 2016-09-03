@@ -27,18 +27,31 @@
     <div class="tab" style="bottom: 0; left: 0; top: 0; right: 0; ">
         <div class="tab-item">
             IDS_RECOVERY
-            <p style="left:10px; top:10px; height: 20px;">IDS_SELECT_WIM_PATH</p>
+            <p style="left:10px; top:15px; height: 20px;">IDS_SELECT_WIM_PATH</p>
             <input style="left: 10px; top:40px; width: 650px; height: 20px;" type="text" />
             <button style="right: 10px; top:40px; width: 100px; height:20px;">IDS_BROWSE</button>
-            <label style="left:10px; top: 70px; height: 20px; width: 100px" for="verify">IDS_WIM_VERIFY</label><input id="verify" type="checkbox" style="left:120px; top: 70px; margin: 2px;" />
-            <label style="left:160px; top: 70px; height: 20px; width: 100px" for="compress">IDS_WIM_COMPRESS</label><input id="compress" type="checkbox" style="left:290px; top: 70px; margin: 2px" />
 
+            <div class="checkbox" onChecked="checked" onClear="cleared" style="left:10px; top: 70px; height: 20px; width: 100px">IDS_WIM_VERIFY</div>
+            <div class="checkbox" style="left:160px; top: 70px; height: 20px; width: 120px">IDS_WIM_COMPRESS</div>
+
+            <p style="left: 10px; top: 115px; height: 20px; right: 10px;">IDS_BACKUP_NAME</p>
+            <div class="textbox" style="left: 10px; top: 140px; height: 20px; right: 10px;"></div>
+
+            <p style="left: 10px; top: 175px; height: 20px; right: 10px;">IDS_BACKUP_DESCRIPTION</p>
+            <div class="textblock" style="left: 10px; top: 200px; height: 200px; right: 10px;"></div>
 
 
             <button style="left: 10px; bottom: 10px; width: 100px; height: 20px">IDS_PERFORM_BACKUP</button>
         </div>
         <div class="tab-item">
             IDS_BACKUP
+            <p style="left:10px; top:15px; height: 20px;">IDS_SELECT_WIM_PATH</p>
+            <input style="left: 10px; top:40px; width: 650px; height: 20px;" type="text" />
+            <button style="right: 10px; top:40px; width: 100px; height:20px;">IDS_BROWSE</button>
+
+
+
+            <button style="left: 10px; bottom: 10px; width: 100px; height: 20px">IDS_PERFORM_RESTORE</button>
         </div>
         <div class="tab-item">
             IDS_FACTORY
@@ -92,6 +105,63 @@
                 }
             });
             return $title;
+        });
+        $(".checkbox").each(function (index, element) {
+            var $cbx = $('<input type="checkbox" />');
+            var $ele = $(element);
+            console.log($ele.css("top"));
+            $cbx.css("top", $ele.css("top")).css("left", (parseInt($ele.css("left")) + $ele.width() + 10) + "px");
+            $ele.after($cbx);
+        });
+        $(".textbox").each(function (index, element) {
+            var $ele = $(element);
+            var html = $ele.attr("name");
+            if (typeof html == "undefined") {
+                html = $ele.attr("text");
+            }
+            if (typeof html == "undefined") {
+                $ele.contents().each(function (ii, ele) {
+                    if (ele.nodeType == Node.TEXT_NODE && ele.textContent.trim().length !== 0) {
+                        html = ele.textContent.trim();
+                        ele.textContent = "";
+                    }
+                });
+            }
+
+            if ($ele.prop("tagName") == "INPUT") {
+                $ele.val(html);
+                return;
+            }
+
+            var $txb = $('<input type="text" />');
+            $txb.css("top", "0").css("left", "0").css("right", "0").css("width", $ele.width() + "px").css("height", $ele.height() + "px");
+            $txb.val(html);
+            $ele.append($txb);
+        });
+        $(".textblock").each(function (index, element) {
+            var $ele = $(element);
+            var html = $ele.attr("name");
+            if (typeof html == "undefined") {
+                html = $ele.attr("text");
+            }
+            if (typeof html == "undefined") {
+                $ele.contents().each(function (ii, ele) {
+                    if (ele.nodeType == Node.TEXT_NODE && ele.textContent.trim().length !== 0) {
+                        html = ele.textContent.trim();
+                        ele.textContent = "";
+                    }
+                });
+            }
+
+            if ($ele.prop("tagName") == "TEXTAREA") {
+                $ele.val(html);
+                return;
+            }
+
+            var $txb = $('<textarea></textarea>');
+            $txb.css("top", "0").css("left", "0").css("right", "0").css("width", $ele.width() + "px").css("height", $ele.height() + "px");
+            $txb.val(html);
+            $ele.append($txb);
         });
     </script>
 </BODY>

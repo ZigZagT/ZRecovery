@@ -11,7 +11,7 @@ public:
 		RECT position = RECT{ 0, 0, 200, 20 },
 		std::wstring text = L"",
 		DWORD style = 0) :
-		ControlBase(position, text, WS_TABSTOP | WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL | ES_LEFT | WS_BORDER | style, parent, NULL, NULL)
+		ControlBase(position, text, WS_TABSTOP | WS_VISIBLE | WS_CHILD | ES_MULTILINE | ES_WANTRETURN |ES_AUTOVSCROLL | ES_LEFT | WS_BORDER | style, parent, NULL, NULL)
 	{
 		_class_name = L"EDIT";
 	}
@@ -21,7 +21,7 @@ public:
 		std::wstring text = L"",
 		RECT position = RECT{ 0, 0, 200, 20 },
 		DWORD style = 0) :
-		ControlBase(position, text, WS_TABSTOP | WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL | ES_LEFT | WS_BORDER | style, parent, NULL, NULL)
+		ControlBase(position, text, WS_TABSTOP | WS_VISIBLE | WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_AUTOVSCROLL | ES_LEFT | WS_BORDER | style, parent, NULL, NULL)
 	{
 		_class_name = L"EDIT";
 	}
