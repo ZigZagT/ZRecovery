@@ -38,9 +38,11 @@ public:
 			{
 				auto c = SendMessage(_hwnd, BM_GETCHECK, 0, 0);
 				if (c == BST_CHECKED && onChecked) {
+					is_checked = true;
 					onChecked(this, lParam);
 				}
 				if (c == BST_UNCHECKED && onClear) {
+					is_checked = false;
 					onClear(this, lParam);
 				}
 				if (onToggle) {
@@ -60,6 +62,7 @@ public:
 	EventHandler onChecked;
 	EventHandler onClear;
 	EventHandler onToggle;
+	bool is_checked = false;
 
 	// Inherited via HTMLUI
 public:

@@ -17,7 +17,16 @@
         .tab-item {
             display: none;
         }
-
+        table {
+            border-collapse: collapse;
+        }
+        tbody, th, tr, td {
+            position:relative;
+        }
+        th, td {
+            border: solid thin;
+            padding: 5px;
+        }
         .tab_label:hover {
             background-color: gainsboro;
         }
@@ -29,10 +38,11 @@
             IDS_RECOVERY
             <p style="left:10px; top:15px; height: 20px;">IDS_SELECT_WIM_PATH</p>
             <input style="left: 10px; top:40px; width: 650px; height: 20px;" type="text" />
-            <button style="right: 10px; top:40px; width: 100px; height:20px;">IDS_BROWSE</button>
+            <button style="right: 10px; top:39px; width: 100px; height:22px;">IDS_BROWSE</button>
 
             <div class="checkbox" onChecked="checked" onClear="cleared" style="left:10px; top: 70px; height: 20px; width: 100px">IDS_WIM_VERIFY</div>
             <div class="checkbox" style="left:160px; top: 70px; height: 20px; width: 120px">IDS_WIM_COMPRESS</div>
+            <p style="right:10px; top: 70px; height: 20px; width: 180px">IDS_BACKUP_CREATE_OR_APPEND</p>
 
             <p style="left: 10px; top: 115px; height: 20px; right: 10px;">IDS_BACKUP_NAME</p>
             <div class="textbox" style="left: 10px; top: 140px; height: 20px; right: 10px;"></div>
@@ -41,20 +51,47 @@
             <div class="textblock" style="left: 10px; top: 200px; height: 200px; right: 10px;"></div>
 
 
-            <button style="left: 10px; bottom: 10px; width: 100px; height: 20px">IDS_PERFORM_BACKUP</button>
+            <button style="left: 10px; bottom: 10px; width: 100px; height: 30px">IDS_PERFORM_BACKUP</button>
         </div>
         <div class="tab-item">
             IDS_BACKUP
             <p style="left:10px; top:15px; height: 20px;">IDS_SELECT_WIM_PATH</p>
             <input style="left: 10px; top:40px; width: 650px; height: 20px;" type="text" />
-            <button style="right: 10px; top:40px; width: 100px; height:20px;">IDS_BROWSE</button>
+            <button style="right: 10px; top:39px; width: 100px; height:22px;">IDS_BROWSE</button>
 
+            <p style="left:10px; top:75px; height: 20px;">IDS_SELECT_BACKUP_FOR_RECOVERY</p>
+            <table style="left: 10px; right: 220px; top: 100px; height: 200px; border: solid thin;">
+                <tr>
+                    <th>IDS_BACKUP_INDEX</th>
+                    <th>IDS_BACKUP_NAME</th>
+                    <th>IDS_BACKUP_DATE</th>
+                </tr>
+            </table>
 
+            <p style="right: 10px; top: 100px; width: 200px; height: 20px; border: solid thin;">IDS_BACKUP_DESCRIPTION</p>
+            <p style="right: 10px; top: 130px; width: 200px; height: 170px; border: solid thin;">IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION</p>
 
-            <button style="left: 10px; bottom: 10px; width: 100px; height: 20px">IDS_PERFORM_RESTORE</button>
+            <button style="left: 10px; bottom: 10px; width: 100px; height: 30px">IDS_RECOVERT_TO_SELECT_BACKUP</button>
+            <button style="left: 130px; bottom: 10px; width: 100px; height: 30px">IDS_DELETE_SELECTED_BACKUP</button>
         </div>
         <div class="tab-item">
             IDS_FACTORY
+
+            <p style="left:10px; top:15px; height: 20px;">IDS_SELECT_FACTORY_BACKUP</p>
+            <table style="left: 10px; right: 220px; top: 40px; height: 200px; border: solid thin;">
+                <tr>
+                    <th>IDS_BACKUP_INDEX</th>
+                    <th>IDS_BACKUP_NAME</th>
+                    <th>IDS_BACKUP_DATE</th>
+                </tr>
+            </table>
+
+            <p style="right: 10px; top: 40px; width: 200px; height: 20px; border: solid thin;">IDS_BACKUP_DESCRIPTION</p>
+            <p style="right: 10px; top: 70px; width: 200px; height: 170px; border: solid thin;">IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION</p>
+
+            <button style="left: 10px; bottom: 10px; width: 100px; height: 30px">IDS_APPEND_FACTORY_BACKUP</button>
+            <button style="left: 130px; bottom: 10px; width: 100px; height: 30px">IDS_DELETE_SELECTED_FACTORY_BACKUP</button>
+            <button style="left: 250px; bottom: 10px; width: 100px; height: 30px">IDS_RECOVERT_TO_SELECT_FACTORY_BACKUP</button>
         </div>
     </div>
     <script>
@@ -109,7 +146,6 @@
         $(".checkbox").each(function (index, element) {
             var $cbx = $('<input type="checkbox" />');
             var $ele = $(element);
-            console.log($ele.css("top"));
             $cbx.css("top", $ele.css("top")).css("left", (parseInt($ele.css("left")) + $ele.width() + 10) + "px");
             $ele.after($cbx);
         });
@@ -162,6 +198,12 @@
             $txb.css("top", "0").css("left", "0").css("right", "0").css("width", $ele.width() + "px").css("height", $ele.height() + "px");
             $txb.val(html);
             $ele.append($txb);
+        });
+        $("table").each(function (index, element) {
+            $ele = $(element);
+            if ($ele.css("left") != "auto" && $ele.css("right") != "auto") {
+                $ele.css("width", ($ele.parent().width() - parseInt($ele.css("left")) - parseInt($ele.css("right"))) + "px");
+            }
         });
     </script>
 </BODY>
