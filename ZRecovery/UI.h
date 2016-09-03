@@ -8,6 +8,8 @@
 #include "TextBox.h"
 #include "ListView.h"
 #include "TreeView.h"
+#include "TextBlock.h"
+#include "CheckBox.h"
 
 #include "SolidWindow.h"
 

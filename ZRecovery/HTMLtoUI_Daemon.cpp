@@ -12,6 +12,8 @@ HTMLtoUI_Daemon::HTMLtoUI_Daemon()
 	Tab::HTMLtoUI_Enable();
 	TextBox::HTMLtoUI_Enable();
 	ListView::HTMLtoUI_Enable();
+	TextBlock::HTMLtoUI_Enable();
+	CheckBox::HTMLtoUI_Enable();
 }
 
 

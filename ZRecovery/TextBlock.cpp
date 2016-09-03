@@ -11,7 +11,7 @@ void TextBlock::bind_event_handler(std::string event_name, IUIElement::EventHand
 	}
 }
 HTMLUI_TypeInfo::UIConstructor TextBlock::create_from_html = [](HTMLUI_UIDescriptor& des) -> std::shared_ptr<UIBase> {
-	auto ret = std::shared_ptr<UIBase>(new TextBlock(des.parent, des.nameW(), des.position()), [](auto& p) {delete (TextBox*)p; });
+	auto ret = std::shared_ptr<UIBase>(new TextBlock(des.parent, des.nameW(), des.position()), [](auto& p) {delete (TextBlock*)p; });
 	ret->create();
 	return ret;
 };

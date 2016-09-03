@@ -12,7 +12,7 @@ public:
 		RECT position = RECT{ 0, 0, 100, 30 },
 		DWORD style = 0
 	) :
-		ControlBase(position, text, WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_CHECKBOX | style, parent, NULL, NULL)
+		ControlBase(position, text, WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX | style, parent, NULL, NULL)
 	{
 		_class_name = L"BUTTON";
 	}
