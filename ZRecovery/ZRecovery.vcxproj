@@ -171,11 +171,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
+    <ClInclude Include="CheckBox.h" />
     <ClInclude Include="ControlBase.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="ListView.h" />
     <ClInclude Include="string_man.h" />
     <ClInclude Include="Tab.h" />
+    <ClInclude Include="TextBlock.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="TreeView.h" />
     <ClInclude Include="UI.h" />
@@ -200,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CheckBox.cpp" />
     <ClCompile Include="CommonControl_Daemon.cpp" />
     <ClCompile Include="COM_Daemon.cpp" />
     <ClCompile Include="Canvas.cpp" />
@@ -216,6 +219,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tab.cpp" />
+    <ClCompile Include="TextBlock.cpp" />
     <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="HTMLtoUI_Daemon.cpp" />
