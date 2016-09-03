@@ -33,6 +33,10 @@ public:
 	}
 
 	void setTitle(std::wstring title) { setText(title); }
+
+	EventHandler onClose;
+
+protected:
 	HBRUSH background = (HBRUSH)(COLOR_WINDOW + 1);
 
 private:

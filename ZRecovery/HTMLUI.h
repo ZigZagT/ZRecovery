@@ -5,6 +5,7 @@
 #include "UIBase.h"
 #include "HTMLtoUI_Daemon.h"
 #include "string_man.h"
+#include "load_resource.h"
 
 template <typename>
 class HTMLUI;
@@ -34,6 +35,11 @@ public:
 		}
 		else {
 			return IUIElement::EventHandler();
+		}
+	}
+	static void register_event_handler(std::initializer_list<std::pair<std::string, IUIElement::EventHandler>> list) {
+		for (auto& p : list) {
+			register_event_handler(p.first, p.second);
 		}
 	}
 	static void register_event_handler(std::string handler_id, IUIElement::EventHandler handler) {
@@ -1028,8 +1034,13 @@ public:
 		auto len = MultiByteToWideChar(CP_UTF8, 0, name.val().data(), static_cast<int>(name.val().length()), output, static_cast<int>(size));
 		std::wstring name_w(output, len);
 		delete output;
-
-		return trim_copy(name_w);
+		name_w = trim_copy(name_w);
+		try {
+			extern HINSTANCE hInst;
+			name_w = load_resource<std::wstring>(hInst, name_w);
+		}
+		catch (std::out_of_range) {}
+		return name_w;
 	}
 	std::vector<std::string> classes;
 	Nullable<std::string> tag;
@@ -1081,6 +1092,12 @@ public:
 class HTMLUI_Parser
 {
 public:
+	static HTMLUI_UINode parse_file(std::string filename) {
+		auto html = std::ifstream(filename);
+		std::ostringstream oss;
+		oss << html.rdbuf();
+		return parse(oss.str());
+	}
 	static HTMLUI_UINode parse(std::wstring html) {
 		auto size = (sizeof(wchar_t) * html.length() + 1) / sizeof(char);
 		char* output = new char[size];

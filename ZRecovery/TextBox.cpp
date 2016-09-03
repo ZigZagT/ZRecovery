@@ -16,6 +16,7 @@ HTMLUI_TypeInfo::UIConstructor TextBox::create_from_html = [](HTMLUI_UIDescripto
 	return ret;
 };
 HTMLUI_TypeInfo::UIMatchAttrMap TextBox::match_attributes {
+	{"class", "textblock"},
 	{"class", "textbox"},
 	{"type", "text"}
 };

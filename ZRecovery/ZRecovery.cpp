@@ -23,11 +23,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 	hInst = hInstance;
 
-
-	auto handlers = ui_demo();
-
-
-	//ZRecovery();
+	ZRecovery();
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_ZRECOVERY));
     MSG msg;
@@ -43,18 +39,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 }
 
 void ZRecovery() {
-	static std::list<std::shared_ptr<void*>> resources;
+	static std::vector<std::shared_ptr<void>> resources;
 #pragma region macros_defines
 #define create_resource(type, name, ...) \
-	resources.emplace_back(new type(__VA_ARGS__), [](auto p) { \
+	resources.emplace_back(reinterpret_cast<void*>(new type(__VA_ARGS__)), [](auto p) { \
 		delete (type*)p; \
 	}); \
 	auto& name = *(type*)resources.back().get();
 #pragma endregion
-	auto wnd = SolidWindow(L"afafafaf");
+	create_resource(SolidWindow, wnd, load_resource<std::wstring>(hInst, IDC_ZRECOVERY), load_resource<std::wstring>(hInst, IDS_APP_TITLE), RECT{ 0, 0, 800, 600 });
+	wnd.onClose = [](auto, auto) {
+		PostQuitMessage(0);
+	};
 	wnd.create();
-	auto btn = Button(wnd.getHandler());
-	btn.create();
+	create_resource(HTMLUI_UINode, html_ui);
+
+	HTMLUI_TypeInfo::register_event_handler({
+		{}
+	});
+
+	html_ui = HTMLUI_Parser::parse_file("ZRecovery.html");
+	HTMLUI_Parser::recursive_create(html_ui, wnd.getHandler());
 	wnd.show(SW_SHOW);
-	Sleep(3000);
 }

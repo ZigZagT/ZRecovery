@@ -206,5 +206,8 @@
     <None Include="index.html">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ZRecovery.html">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
