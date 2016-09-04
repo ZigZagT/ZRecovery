@@ -29,7 +29,7 @@ public:
 		std::wstring text = L"Button",
 		RECT position = RECT{ 0, 0, 200, 100 },
 		DWORD style = 0) : //LVS_SINGLESEL
-		ControlBase(position, text, WS_VISIBLE | WS_CHILD | LVS_REPORT | LVS_SHOWSELALWAYS  | style, parent, NULL, NULL) {
+		ControlBase(position, text, WS_VISIBLE | WS_CHILD | LVS_REPORT | LVS_SHOWSELALWAYS | style, parent, NULL, NULL) {
 		_window_class = WC_LISTVIEW;
 	}
 	virtual ~ListView() {
@@ -67,7 +67,9 @@ public:
 			{
 				auto& item = reinterpret_cast<NMLVDISPINFO*>(lParam)->item;
 				if (item.iSubItem != 0) {
-					item.pszText = (wchar_t*)_items[item.iItem].colomns[item.iSubItem - 1].c_str();
+					if (_items[item.iItem].colomns.size() >= item.iSubItem) {
+						item.pszText = (wchar_t*)_items[item.iItem].colomns[item.iSubItem - 1].c_str();
+					}
 					return TRUE;
 				}
 				return FALSE;
@@ -85,14 +87,24 @@ public:
 				auto& info = *reinterpret_cast<NMITEMACTIVATE*>(lParam);
 				return 0;
 			}
-			case LVN_ODSTATECHANGED:
+			case LVN_ITEMCHANGED: 
 			{
-				auto& info = *reinterpret_cast<LPNMLVODSTATECHANGE*>(lParam);
-				if (onSelectionChange) {
-					onSelectionChange(this, (unsigned long long)&info);
+				auto& info = *reinterpret_cast<NMLISTVIEW*>(lParam);
+				if (onSelected) {
+					if (info.uNewState | LVIS_SELECTED && !(info.uOldState &  LVIS_SELECTED)) {
+						onSelected(this, info.iItem);
+					}
 				}
 				return 0;
 			}
+			//case LVN_ODSTATECHANGED:
+			//{
+			//	auto& info = *reinterpret_cast<LPNMLVODSTATECHANGE*>(lParam);
+			//	if (onSelectionChange) {
+			//		onSelectionChange(this, (unsigned long long)&info);
+			//	}
+			//	return 0;
+			//}
 			default:
 				return DefWindowProc(_hwnd, uMsg, wParam, lParam);
 			}
@@ -103,6 +115,7 @@ public:
 	}
 
 	EventHandler onSelectionChange;
+	EventHandler onSelected;
 	EventHandler onClick;
 
 	// Inherited via IUIContainer

@@ -188,9 +188,6 @@
     <ClCompile Include="Label.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="TextBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UIDemo.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
@@ -198,7 +195,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextBlock.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBox.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

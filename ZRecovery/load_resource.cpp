@@ -18,7 +18,7 @@ std::wstring load_resource<std::wstring>(HINSTANCE hInst, std::wstring id) {
 		dict_entry(IDS_APP_TITLE),
 		dict_entry(IDS_WIM_FILE),
 		dict_entry(IDS_BACKUP),
-		dict_entry(IDS_RECOVERY),
+		dict_entry(IDS_RESTORE),
 		dict_entry(IDS_FACTORY),
 		dict_entry(IDS_SELECT_WIM_PATH),
 		dict_entry(IDS_BROWSE)

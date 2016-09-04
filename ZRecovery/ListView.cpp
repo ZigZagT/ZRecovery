@@ -121,6 +121,18 @@ ListViewItem & ListView::front()
 
 void ListView::bind_event_handler(std::string event_name, IUIElement::EventHandler handler)
 {
+	if (case_insensitive_compare(event_name, "onSelectionChange")) {
+		onSelectionChange = handler;
+	}
+	if (case_insensitive_compare(event_name, "onSelected")) {
+		onSelected = handler;
+	}
+	if (case_insensitive_compare(event_name, "onChange")) {
+		onSelected = handler;
+	}
+	if (case_insensitive_compare(event_name, "onClick")) {
+		onClick = handler;
+	}
 }
 
 
@@ -141,7 +153,7 @@ HTMLUI_TypeInfo::UIConstructor ListView::create_from_html = [](HTMLUI_UIDescript
 		(des.tag && des.tag.val() == "TABLE")
 		) {
 		flag = table;
-		ui = std::shared_ptr<UIBase>(new ListView(des.parent, des.nameW(), des.position()), [](auto& p) {delete (ListView*)p; });
+		ui = std::shared_ptr<UIBase>(new ListView(des.parent, des.nameW(), des.position(), LVS_SINGLESEL), [](auto& p) {delete (ListView*)p; });
 		ui->create();
 		return ui;
 	}
@@ -179,5 +191,7 @@ HTMLUI_TypeInfo::UIMatchAttrMap ListView::match_attributes{
 };
 HTMLUI_TypeInfo::UISupportedEventsSet ListView::supported_events{
 	"onSelectionChange",
+	"onSelected",
+	"onChange",
 	"onClick"
 };
