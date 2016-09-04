@@ -82,6 +82,9 @@ public:
 		operator bool() {
 			return !is_null;
 		}
+		//operator T&() {
+		//	return *(this->get());
+		//}
 		T& val() {
 			return *(this->get());
 		}
@@ -124,6 +127,7 @@ public:
 				add_attr_str(src)
 				add_attr_str(name)
 				add_attr_str2(text, name)
+				add_attr_str2(id, sid)
 
 				push_class_name()
 			add_attr_end()
@@ -948,6 +952,7 @@ public:
 	//HTMLUI_UINode* node;
 	std::map<std::string, IUIElement::EventHandler> event_handler;
 	int id;
+
 	RECT position() {
 		if (parent != NULL) {
 			RECT rc;
@@ -1025,6 +1030,8 @@ public:
 
 	Nullable<std::string> src;
 	Nullable<std::string> name;
+	Nullable<std::string> sid;
+
 	std::wstring nameW() {
 		if (!name) {
 			return L"";
@@ -1095,6 +1102,14 @@ public:
 class HTMLUI_Parser
 {
 public:
+	class named_ui_set : private std::map<std::string, std::shared_ptr<UIBase>> {
+		friend class HTMLUI_Parser;
+	public:
+		mapped_type& query(const key_type& key) {
+			return at(key);
+		}
+	};
+
 	static HTMLUI_UINode parse_file(std::string filename) {
 		auto html = std::ifstream(filename);
 		std::ostringstream oss;
@@ -1116,7 +1131,8 @@ public:
 		_parse_node(docs, &root);
 		return root;
 	}
-	static void recursive_create(HTMLUI_UINode& node, HWND parent = NULL) {
+	static named_ui_set recursive_create(HTMLUI_UINode& node, HWND parent = NULL) {
+		named_ui_set ret;
 		HWND next_parent = parent;
 		// create ui if the node is marked can_create
 		if (node.descriptor.can_create) {
@@ -1126,12 +1142,19 @@ public:
 				dynamic_cast<IHTMLUI*>(node.ui.get())->bind_event_handler(pair.first, pair.second);
 			}
 			next_parent = node.ui->getHandler();
+
+			if (node.descriptor.sid) {
+				ret.insert({ node.descriptor.sid.val(), node.ui });
+			}
 		}
 
 		// create children ui
 		for (auto& next : node.children) {
-			HTMLUI_Parser::recursive_create(*(next.get()), next_parent);
+			auto children_ret = HTMLUI_Parser::recursive_create(*(next.get()), next_parent);
+			ret.insert(children_ret.begin(), children_ret.end());
 		}
+
+		return ret;
 	}
 private:
 	HTMLUI_Parser() {}

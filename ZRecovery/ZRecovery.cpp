@@ -54,6 +54,7 @@ void ZRecovery() {
 	wnd.create();
 	create_resource(HTMLUI_UINode, html_ui);
 
+	HTMLUI_Parser::named_ui_set html_ui_set;
 	HTMLUI_TypeInfo::register_event_handler({
 		{"checked", [](auto, auto) {
 			Alert("checked!");
@@ -62,8 +63,7 @@ void ZRecovery() {
 			Alert("cleared!");
 		}}
 	});
-
 	html_ui = HTMLUI_Parser::parse_file("ZRecovery.html");
-	HTMLUI_Parser::recursive_create(html_ui, wnd.getHandler());
+	html_ui_set = HTMLUI_Parser::recursive_create(html_ui, wnd.getHandler());
 	wnd.show(SW_SHOW);
 }
