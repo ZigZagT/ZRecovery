@@ -43,6 +43,8 @@ event(backup_on_wim_path_change) {
 	Alert("backup_on_wim_path_change");
 }
 event(backup_on_browse_wim) {
+	WIM::open_wim_file();
+	html_ui_set.query("backup-wim-path");
 	Alert("backup_on_browse_wim");
 }
 event(backup_on_create_backup) {
