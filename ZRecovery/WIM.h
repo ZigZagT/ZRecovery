@@ -4,6 +4,16 @@
 class WIM_ImageInfo {
 public:
 	WIM_ImageInfo(std::wstring xml);
+	~WIM_ImageInfo();
+
+	std::wstring to_xml();
+
+private:
+	IXMLDOMDocument2* _doc = NULL;
+	IXMLDOMNode* _name = NULL;
+	IXMLDOMNode* _description = NULL;
+	IXMLDOMNode* _date = NULL;
+	static const wchar_t leading_code = 0xfeff;
 };
 
 class WIM
