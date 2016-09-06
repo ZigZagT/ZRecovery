@@ -126,6 +126,7 @@ public:
 	virtual void erase(size_t index) override;
 	virtual ListViewItem & back() override;
 	virtual ListViewItem & front() override;
+	virtual void clear() override;
 
 private:
 	size_t _count = 0;

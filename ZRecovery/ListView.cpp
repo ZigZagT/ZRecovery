@@ -106,7 +106,9 @@ size_t ListView::count()
 
 void ListView::erase(size_t index)
 {
-	throw std::runtime_error("not implemented");
+	SendMessage(_hwnd, LVM_DELETEITEM, index, 0);
+	_items.erase(_items.begin() + index);
+	--_count;
 }
 
 ListViewItem & ListView::back()
@@ -117,6 +119,13 @@ ListViewItem & ListView::back()
 ListViewItem & ListView::front()
 {
 	return _items.front();
+}
+
+void ListView::clear()
+{
+	_items.clear();
+	_count = 0;
+	SendMessage(_hwnd, LVM_DELETEALLITEMS, 0, 0);
 }
 
 void ListView::bind_event_handler(std::string event_name, IUIElement::EventHandler handler)

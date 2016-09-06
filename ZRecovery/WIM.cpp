@@ -3,6 +3,7 @@
 #include "ZRecovery.h"
 #include "load_resource.h"
 #include "debug.h"
+#include "string_man.h"
 #include "COM_Proxy.h"
 
 
@@ -64,6 +65,7 @@ size_t WIM::size()
 void WIM::set_temporary_path(std::wstring path)
 {
 	if (WIMSetTemporaryPath(_handle, path.c_str()) == 0) {
+		auto k = GetLastError();
 		throw std::runtime_error("set_temporary_path failed");
 	}
 }
@@ -122,7 +124,7 @@ void WIM::set_info(size_t index, WIM_ImageInfo info)
 	if (!_is_valid) {
 		throw std::runtime_error("invalid handle");
 	}
-	HANDLE h = WIMLoadImage(_handle, index);
+	HANDLE h = WIMLoadImage(_handle, index + 1);
 	if (h == NULL) {
 		throw std::runtime_error("load image filed");
 	}
@@ -247,17 +249,17 @@ DWORD WIM::message_procedure(DWORD dwMessageId, WPARAM wParam, LPARAM lParam, PV
 	WIM* wim = reinterpret_cast<WIM*>(pvUserData);
 
 	std::vector<std::wstring> bypass = {
-		L"\$windows.~bt",
-		L"\$windows.~ls",
-		L"\winpepge.sys",
-		L"\Windows\CSC",
-		L"\Recycled",
-		L"\Recycler",
-		L"\$Recycle.Bin",
-		L"\System Volume Information",
-		L"\swapfile.sys",
-		L"\pagefile.sys",
-		L"\hiberfil.sys"
+		LR"rule(\$windows.~bt)rule",
+		LR"rule(\$windows.~ls)rule",
+		LR"rule(\winpepge.sys)rule",
+		LR"rule(\Windows\CSC)rule",
+		LR"rule(\Recycled)rule",
+		LR"rule(\Recycler)rule",
+		LR"rule(\$Recycle.Bin)rule",
+		LR"rule(\System Volume Information)rule",
+		LR"rule(\swapfile.sys)rule",
+		LR"rule(\pagefile.sys)rule",
+		LR"rule(\hiberfil.sys)rule"
 	};
 	switch (dwMessageId)
 	{
@@ -271,6 +273,9 @@ DWORD WIM::message_procedure(DWORD dwMessageId, WPARAM wParam, LPARAM lParam, PV
 				*res = 0;
 				break;
 			}
+		}
+		if (wim->onSkipFile) {
+			wim->onSkipFile(wim, wParam, 0);
 		}
 		return WIM_MSG_SUCCESS;
 	}
@@ -549,10 +554,15 @@ std::wstring WIM_ImageInfo::get_date()
 
 std::wstring WIM_ImageInfo::get_date_localtime()
 {
-	std::wostringstream oss;
-	time_t time = std::stoll(get_date());
-	oss << std::put_time(localtime(&time), L"%F %T %Z");
-	return oss.str();
+	try {
+		std::wostringstream oss;
+		time_t time = std::stoll(get_date());
+		oss << std::put_time(localtime(&time), L"%F %T %Z");
+		return oss.str();
+	}
+	catch (std::invalid_argument) {
+		return L"";
+	}
 }
 
 void WIM_ImageInfo::set_name(std::wstring name)

@@ -20,6 +20,10 @@ public:
 		destroy();
 	}
 
+	virtual Canvas& operator=(Canvas&& old) noexcept{
+		WindowBase::operator=(std::move(old));
+		return *this;
+	}
 
 protected:
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);

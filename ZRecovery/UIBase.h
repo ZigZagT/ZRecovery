@@ -40,6 +40,7 @@ class IUIContainer {
 	virtual ContentType& front() = 0;
 	virtual size_t count() = 0;
 	virtual void erase(size_t index) = 0;
+	virtual void clear() = 0;
 };
 
 
@@ -85,6 +86,27 @@ public:
 		destroy();
 	};
 
+	UIBase& operator = (UIBase&& old) noexcept {
+		destroy();
+		_name = std::move(old._name);
+		_style = std::move(old._style);
+		_parent = std::move(old._parent);
+		_children = std::move(old._children);
+		_instance = std::move(old._instance);
+		_param = std::move(old._param);
+		_hwnd = std::move(old._hwnd);
+		_class_name = std::move(old._class_name);
+		_window_class = std::move(old._window_class);
+		_is_valid = std::move(old._is_valid);
+
+		old._is_valid = false;
+		if (_is_valid) {
+			_window_registry[_hwnd] = this;
+		}
+
+		return *this;
+	}
+
 	virtual std::wstring getName() { return _name; }
 	HINSTANCE getInstance() { return _instance; }
 	LPCTSTR getClassName() { return _window_class; }
@@ -106,6 +128,7 @@ protected:
 private:
 	static HFONT _default_font;
 
+#pragma region IUIElement
 	// Implementation of IUIElement
 public:
 	virtual void create() {
@@ -215,5 +238,6 @@ public:
 	}
 private:
 	static std::map<HWND, UIBase*> _window_registry;
+#pragma endregion
 };
 

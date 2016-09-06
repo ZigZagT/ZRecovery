@@ -55,11 +55,11 @@
         <div class="tab-item">
             IDS_RESTORE
             <p style="left:10px; top:15px; height: 20px;">IDS_SELECT_WIM_PATH</p>
-            <input style="left: 10px; top:40px; width: 650px; height: 20px;" type="text" onchange="restore_on_wim_path_change"/>
+            <input id="restore-wim-path" style="left: 10px; top:40px; width: 650px; height: 20px;" type="text" onchange="restore_on_wim_path_change"/>
             <button style="right: 10px; top:39px; width: 100px; height:22px;" onclick="restore_on_browse_wim">IDS_BROWSE</button>
 
             <p style="left:10px; top:75px; height: 20px;">IDS_SELECT_BACKUP_FOR_RECOVERY</p>
-            <table style="left: 10px; right: 220px; top: 100px; height: 200px; border: solid thin;" onchange="restore_on_select_backup">
+            <table id="restore-wim-info" style="left: 10px; right: 220px; top: 100px; height: 200px; border: solid thin;" onchange="restore_on_select_backup">
                 <tr>
                     <th>IDS_BACKUP_INDEX</th>
                     <th>IDS_BACKUP_NAME</th>
@@ -79,7 +79,7 @@
             </table>
 
             <p style="right: 10px; top: 100px; width: 200px; height: 20px; border: solid thin;">IDS_BACKUP_DESCRIPTION</p>
-            <p style="right: 10px; top: 130px; width: 200px; height: 170px; border: solid thin;">IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION</p>
+            <p id="restore-image-description" style="right: 10px; top: 130px; width: 200px; height: 170px; border: solid thin;">IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION</p>
 
             <button style="left: 10px; bottom: 10px; width: 100px; height: 30px" onclick="restore_on_restore_to_selected_backup">IDS_RESTORE_TO_SELECT_BACKUP</button>
             <button style="left: 130px; bottom: 10px; width: 100px; height: 30px" onclick="restore_on_delete_selected_backup">IDS_DELETE_SELECTED_BACKUP</button>

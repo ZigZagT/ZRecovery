@@ -32,6 +32,12 @@ public:
 		destroy();
 	}
 
+	WindowBase& operator= (WindowBase&& old) noexcept {
+		UIBase::operator=(std::move(old));
+		SetWindowLongPtr(_hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+		return *this;
+	}
+
 	void setTitle(std::wstring title) { setText(title); }
 
 	EventHandler onClose;

@@ -1,6 +1,5 @@
 // ZRecovery.cpp : Defines the entry point for the application.
 //
-
 #include "stdafx.h"
 #include "ZRecovery.h"
 
@@ -52,23 +51,33 @@ event(backup_on_create_backup) {
 
 // page 2
 event(restore_on_wim_path_change) {
-	Alert("restore_on_wim_path_change");
-}
-event(restore_on_browse_wim) {
-	auto path = WIM::open_wim_file();
+	auto path = dynamic_cast<TextBox*>(sender)->getText();
 	WIM wim;
 	if (WIM::test_file_exist(path)) {
 		wim.open(path);
 	}
+	else {
+		return;
+	}
 	wim.set_temporary_path(L"c:");
-	auto info = wim.get_info(0);
-	info.set_date_now();
-	Alert(info.get_date_localtime());
-	Alert(info.to_xml());
-	html_ui_set.query("backup-wim-path");
+
+	auto lsv = dynamic_cast<ListView*>(html_ui_set.query("restore-wim-info").get());
+	lsv->clear();
+	for (size_t i = 0; i < wim.size(); ++i) {
+		auto info = wim.get_info(i);
+		lsv->insert({ std::to_wstring(i), info.get_name(), info.get_date_localtime(), info.get_description() });
+	}
+}
+
+event(restore_on_browse_wim) {
+	auto textbox_path = html_ui_set.query("restore-wim-path");
+	auto path = WIM::open_wim_file();
+	textbox_path->setText(path);
 }
 event(restore_on_select_backup) {
-	Alert("restore_on_select_backup");
+	auto lsv = dynamic_cast<ListView*>(sender);
+	auto des = html_ui_set.query("restore-image-description");
+	des->setText(lsv->at(EventArgs).colomns.back());
 }
 event(restore_on_restore_to_selected_backup) {
 	Alert("restore_on_restore_to_selected_backup");

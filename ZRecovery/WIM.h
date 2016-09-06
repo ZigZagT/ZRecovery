@@ -48,6 +48,7 @@ public:
 
 	EventHandler onProgressChange;
 	EventHandler onError;
+	EventHandler onSkipFile;
 
 
 	static std::wstring open_wim_file();

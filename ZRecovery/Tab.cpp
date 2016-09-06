@@ -124,7 +124,9 @@ size_t Tab::count()
 
 void Tab::erase(size_t index)
 {
-	throw std::runtime_error("not implemented");
+	_tab_content.erase(_tab_content.begin() + index);
+	SendMessage(_hwnd, TCM_DELETEITEM, index, 0);
+	--_count;
 }
 
 Canvas & Tab::back()
@@ -135,6 +137,13 @@ Canvas & Tab::back()
 Canvas & Tab::front()
 {
 	return _tab_content.front();
+}
+
+void Tab::clear()
+{
+	_tab_content.clear();
+	SendMessage(_hwnd, TCM_DELETEALLITEMS, 0, 0);
+	_count = 0;
 }
 
 void Tab::bind_event_handler(std::string event_name, IUIElement::EventHandler handler)

@@ -50,6 +50,7 @@ public:
 	virtual void erase(size_t index) override;
 	virtual Canvas & back() override;
 	virtual Canvas & front() override;
+	virtual void clear() override;
 
 	// Inherited via HTMLUI
 public:
