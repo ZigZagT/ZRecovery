@@ -21,7 +21,26 @@ std::wstring load_resource<std::wstring>(HINSTANCE hInst, std::wstring id) {
 		dict_entry(IDS_RESTORE),
 		dict_entry(IDS_FACTORY),
 		dict_entry(IDS_SELECT_WIM_PATH),
-		dict_entry(IDS_BROWSE)
+		dict_entry(IDS_BROWSE),
+		dict_entry(IDS_WIM_VERIFY),
+		dict_entry(IDS_WIM_COMPRESS),
+		dict_entry(IDS_BACKUP_CREATE),
+		dict_entry(IDS_BACKUP_APPEND),
+		dict_entry(IDS_CREATE_BACKUP_NAME),
+		dict_entry(IDS_CREATE_BACKUP_DESCRIPTION),
+		dict_entry(IDS_CREATE_BACKUP),
+		dict_entry(IDS_SELECT_BACKUP_FOR_RECOVERY),
+		dict_entry(IDS_BACKUP_INDEX),
+		dict_entry(IDS_BACKUP_NAME),
+		dict_entry(IDS_BACKUP_DATE),
+		dict_entry(IDS_BACKUP_DESCRIPTION),
+		dict_entry(IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION),
+		dict_entry(IDS_RESTORE_TO_SELECT_BACKUP),
+		dict_entry(IDS_DELETE_SELECTED_BACKUP),
+		dict_entry(IDS_SELECT_FACTORY_BACKUP),
+		dict_entry(IDS_CREATE_FACTORY_BACKUP),
+		dict_entry(IDS_DELETE_SELECTED_FACTORY_BACKUP),
+		dict_entry(IDS_RESTORE_TO_SELECT_FACTORY_BACKUP)
 	};
 	auto uid = dict.at(id);
 	return load_resource<std::wstring>(hInst, uid);
