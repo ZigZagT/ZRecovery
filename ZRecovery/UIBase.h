@@ -14,6 +14,8 @@ public:
 	virtual void create() = 0;
 	virtual void destroy() = 0;
 	virtual bool isValid() = 0;
+	virtual void enable() = 0;
+	virtual void disable() = 0;
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 	virtual HWND getHandler() = 0;
 	virtual void register_window() = 0;
@@ -201,9 +203,12 @@ public:
 	virtual bool isValid() {
 		return _is_valid;
 	}
-	//virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	//	return DefWindowProc(_hwnd, uMsg, wParam, lParam);
-	//}
+	virtual void enable() {
+		EnableWindow(_hwnd, true);
+	}
+	virtual void disable() {
+		EnableWindow(_hwnd, false);
+	}
 	virtual HWND getHandler() { return _hwnd; }
 	virtual void register_window() {
 		_window_registry.insert(std::make_pair(_hwnd, this));

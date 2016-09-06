@@ -38,18 +38,31 @@ HTMLUI_Parser::named_ui_set ZRecovery::html_ui_set;
 
 #define event(name) void ZRecovery::name(IUIElement* sender, unsigned long long EventArgs)
 
-// page 1
+// page 1: backup
 event(backup_on_wim_path_change) {
-	Alert("backup_on_wim_path_change");
+	auto compress_checkbox = html_ui_set.query("backup-compress");
+	auto create_or_append_label = html_ui_set.query("backup-wim-create-or-append");
+
+	auto path = dynamic_cast<TextBox*>(sender)->getText();
+	if (WIM::test_file_exist(path)) {
+		compress_checkbox->disable();
+		create_or_append_label->setText(load_resource<std::wstring>(hInst, IDS_BACKUP_APPEND));
+	}
+	else {
+		compress_checkbox->disable();
+		create_or_append_label->setText(load_resource<std::wstring>(hInst, IDS_BACKUP_CREATE));
+	}
 }
 event(backup_on_browse_wim) {
-	Alert("backup_on_browse_wim");
+	auto textbox_path = html_ui_set.query("backup-wim-path");
+	auto path = WIM::save_wim_file();
+	textbox_path->setText(path);
 }
 event(backup_on_create_backup) {
 	Alert("backup_on_create_backup");
 }
 
-// page 2
+// page 2: restore
 event(restore_on_wim_path_change) {
 	auto path = dynamic_cast<TextBox*>(sender)->getText();
 	WIM wim;

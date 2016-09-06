@@ -39,9 +39,9 @@
             <input id="backup-wim-path" style="left: 10px; top:40px; width: 650px; height: 20px;" type="text" onchange="backup_on_wim_path_change" />
             <button style="right: 10px; top:39px; width: 100px; height:22px;" onclick="backup_on_browse_wim">IDS_BROWSE</button>
 
-            <div class="checkbox" style="left:10px; top: 70px; height: 20px; width: 100px">IDS_WIM_VERIFY</div>
-            <div class="checkbox" style="left:160px; top: 70px; height: 20px; width: 120px">IDS_WIM_COMPRESS</div>
-            <p style="right:10px; top: 70px; height: 20px; width: 180px">IDS_BACKUP_CREATE_OR_APPEND</p>
+            <div id="backup-verify" class="checkbox" style="left:10px; top: 70px; height: 20px; width: 100px">IDS_WIM_VERIFY</div>
+            <div id="backup-compress" class="checkbox" style="left:160px; top: 70px; height: 20px; width: 120px">IDS_WIM_COMPRESS</div>
+            <p id="backup-wim-create-or-append" style="right:10px; top: 70px; height: 20px; width: 180px"><!--IDS_BACKUP_CREATE_OR_APPEND--></p>
 
             <p style="left: 10px; top: 115px; height: 20px; right: 10px;">IDS_CREATE_BACKUP_NAME</p>
             <div class="textbox" style="left: 10px; top: 140px; height: 20px; right: 10px;"></div>
@@ -65,6 +65,7 @@
                     <th width="380px">IDS_BACKUP_NAME</th>
                     <th width="125px">IDS_BACKUP_DATE</th>
                 </tr>
+                <!--
                 <tr>
                     <td>1</td>
                     <td>2</td>
@@ -76,10 +77,11 @@
                 <tr>
                     <td>3</td>
                 </tr>
+                -->
             </table>
 
-            <p style="right: 10px; top: 100px; width: 200px; height: 20px; border: solid thin;">IDS_BACKUP_DESCRIPTION</p>
-            <p id="restore-image-description" style="right: 10px; top: 130px; width: 200px; height: 170px; border: solid thin;">IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION</p>
+            <p style="right: 10px; top: 100px; width: 200px; height: 20px;">IDS_BACKUP_DESCRIPTION</p>
+            <p id="restore-image-description" style="right: 10px; top: 130px; width: 200px; height: 170px;">IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION</p>
 
             <button style="left: 10px; bottom: 10px; width: 100px; height: 30px" onclick="restore_on_restore_to_selected_backup">IDS_RESTORE_TO_SELECT_BACKUP</button>
             <button style="left: 130px; bottom: 10px; width: 100px; height: 30px" onclick="restore_on_delete_selected_backup">IDS_DELETE_SELECTED_BACKUP</button>
@@ -94,6 +96,7 @@
                     <th width="380px">IDS_BACKUP_NAME</th>
                     <th width="125px">IDS_BACKUP_DATE</th>
                 </tr>
+                <!--
                 <tr>
                     <td>1</td>
                     <td>2</td>
@@ -105,10 +108,11 @@
                 <tr>
                     <td>3</td>
                 </tr>
+                -->
             </table>
 
-            <p style="right: 10px; top: 40px; width: 200px; height: 20px; border: solid thin;">IDS_BACKUP_DESCRIPTION</p>
-            <p style="right: 10px; top: 70px; width: 200px; height: 170px; border: solid thin;">IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION</p>
+            <p style="right: 10px; top: 40px; width: 200px; height: 20px;">IDS_BACKUP_DESCRIPTION</p>
+            <p style="right: 10px; top: 70px; width: 200px; height: 170px;">IDS_SELECT_BACKUP_TO_SEE_DESCRIPTION</p>
 
             <button style="left: 10px; bottom: 10px; width: 100px; height: 30px" onclick="factory_on_create_backup">IDS_CREATE_FACTORY_BACKUP</button>
             <button style="left: 130px; bottom: 10px; width: 100px; height: 30px" onclick="factory_on_delete_selected_backup">IDS_DELETE_SELECTED_FACTORY_BACKUP</button>

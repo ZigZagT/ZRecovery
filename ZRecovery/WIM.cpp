@@ -144,20 +144,17 @@ void WIM::set_info(size_t index, WIM_ImageInfo info)
 std::wstring WIM::open_wim_file()
 {
 	extern HINSTANCE hInst;
-	std::shared_ptr<IFileOpenDialog> pFileOpen;
-	IFileOpenDialog *tempFileOpen;
-	auto hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&tempFileOpen));
+	COM_Proxy<IFileOpenDialog> pFileOpen;
+	auto hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(pFileOpen.pget()));
 	if (FAILED(hr)) {
 		throw std::runtime_error("Create FileOpenDialog failed");
 	}
-	else {
-		pFileOpen.reset(tempFileOpen, [](auto p) { p->Release(); });
-	}
+	pFileOpen.active();
 
 	auto str = load_resource < std::wstring >(hInst, IDS_WIM_FILE);
 	COMDLG_FILTERSPEC available_file_types[] = {
-		{ str.c_str(), L"*.wim" },
-		{ L"Any", L"*.*" }
+		{ str.c_str(), L"*.wim" }
+		//,{ L"Any", L"*.*" }
 	};
 	pFileOpen->SetFileTypes(sizeof(available_file_types) / sizeof(COMDLG_FILTERSPEC), available_file_types);
 
@@ -181,7 +178,6 @@ std::wstring WIM::open_wim_file()
 	file.reset(tempfile, [](auto p) {CoTaskMemFree(p); });
 
 	std::wstring ret;
-	//Alert(file.get());
 	ret = std::wstring(file.get());
 	return ret;
 }
@@ -189,23 +185,20 @@ std::wstring WIM::open_wim_file()
 std::wstring WIM::save_wim_file()
 {
 	extern HINSTANCE hInst;
-	std::shared_ptr<IFileSaveDialog> pFileSave;
-	IFileSaveDialog *temp;
-	auto hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_ALL, IID_IFileSaveDialog, reinterpret_cast<void**>(&temp));
+	COM_Proxy<IFileSaveDialog> pFileSave;
+	auto hr = CoCreateInstance(CLSID_FileSaveDialog, nullptr, CLSCTX_ALL, IID_IFileSaveDialog, reinterpret_cast<void**>(pFileSave.pget()));
 	if (FAILED(hr)) {
 		throw std::runtime_error("Create FileSaveDialog failed");
 	}
-	else {
-		pFileSave.reset(temp, [](auto p) { p->Release(); });
-	}
+	pFileSave.active();
 
 	auto str = load_resource < std::wstring >(hInst, IDS_WIM_FILE);
 	COMDLG_FILTERSPEC available_file_types[] = {
-		{ str.c_str(), L"*.wim" },
-		{ L"Any", L"*.*" }
+		{ str.c_str(), L"*.wim" }
+		//,{ L"Any", L"*.*" }
 	};
 	pFileSave->SetFileTypes(sizeof(available_file_types) / sizeof(COMDLG_FILTERSPEC), available_file_types);
-
+	pFileSave->SetDefaultExtension(L"wim");
 	//FILEOPENDIALOGOPTIONS opt;
 	//pFileSave->GetOptions(&opt);
 	//pFileSave->SetOptions(opt);
@@ -226,7 +219,6 @@ std::wstring WIM::save_wim_file()
 	file.reset(tempfile, [](auto p) {CoTaskMemFree(p); });
 
 	std::wstring ret;
-	Alert(file.get());
 	ret = std::wstring(file.get());
 	return ret;
 }
