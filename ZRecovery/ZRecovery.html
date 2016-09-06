@@ -10,7 +10,7 @@
             position: absolute;
             font-size: 15px;
         }
-        p {
+        p, div{
             cursor: default;
         }
         .tab-item {
@@ -61,9 +61,9 @@
             <p style="left:10px; top:75px; height: 20px;">IDS_SELECT_BACKUP_FOR_RECOVERY</p>
             <table id="restore-wim-info" style="left: 10px; right: 220px; top: 100px; height: 200px; border: solid thin;" onchange="restore_on_select_backup">
                 <tr>
-                    <th>IDS_BACKUP_INDEX</th>
-                    <th>IDS_BACKUP_NAME</th>
-                    <th>IDS_BACKUP_DATE</th>
+                    <th width="40px">IDS_BACKUP_INDEX</th>
+                    <th width="380px">IDS_BACKUP_NAME</th>
+                    <th width="125px">IDS_BACKUP_DATE</th>
                 </tr>
                 <tr>
                     <td>1</td>
@@ -90,9 +90,9 @@
             <p style="left:10px; top:15px; height: 20px;">IDS_SELECT_FACTORY_BACKUP</p>
             <table style="left: 10px; right: 220px; top: 40px; height: 200px; border: solid thin;" onchange="factory_on_select_backup">
                 <tr>
-                    <th>IDS_BACKUP_INDEX</th>
-                    <th>IDS_BACKUP_NAME</th>
-                    <th>IDS_BACKUP_DATE</th>
+                    <th width="40px">IDS_BACKUP_INDEX</th>
+                    <th width="380px">IDS_BACKUP_NAME</th>
+                    <th width="125px">IDS_BACKUP_DATE</th>
                 </tr>
                 <tr>
                     <td>1</td>
@@ -170,6 +170,9 @@
             var $ele = $(element);
             $cbx.css("top", $ele.css("top")).css("left", (parseInt($ele.css("left")) + $ele.width() + 10) + "px");
             $ele.after($cbx);
+            $ele.on("click", function () {
+                $cbx.prop("checked", !$cbx.prop("checked"));
+            });
         });
         $(".textbox").each(function (index, element) {
             var $ele = $(element);

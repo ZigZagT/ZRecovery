@@ -53,6 +53,20 @@ public:
 	void insertColumn(std::wstring&& col, Types&&... others) {
 		_insertColumns<Types...>(std::forward<std::wstring&&>(col), std::forward<Types>(others)...);
 	}
+	void setColumnWidth(size_t index, size_t width) {
+		SendMessage(_hwnd, LVM_SETCOLUMNWIDTH, index, width);
+	}
+	void setColumnWidthAuto(size_t index) {
+		SendMessage(_hwnd, LVM_SETCOLUMNWIDTH, index, LVSCW_AUTOSIZE);
+	}
+	void setColumnWidthAuto() {
+		for (size_t i = 0; i < _count; ++i) {
+			setColumnWidthAuto(i);
+		}
+	}
+	size_t columnCount() {
+		return _col_count;
+	}
 
 	virtual void refresh();
 	virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -117,6 +131,12 @@ public:
 	EventHandler onSelectionChange;
 	EventHandler onSelected;
 	EventHandler onClick;
+
+	// Inherited via IUIElement
+	virtual void create() {
+		ControlBase::create();
+		SendMessage(_hwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
+	}
 
 	// Inherited via IUIContainer
 	virtual void insert(ListViewItem && item) override;

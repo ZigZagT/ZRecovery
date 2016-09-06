@@ -168,6 +168,9 @@ HTMLUI_TypeInfo::UIConstructor ListView::create_from_html = [](HTMLUI_UIDescript
 	}
 	if (flag & table && des.tag && des.tag.val() == "TH") {
 		lv.insertColumn(des.nameW());
+		if (des.width) {
+			lv.setColumnWidth(lv.columnCount() - 1, des.width.val());
+		}
 		lv.refresh();
 		return ui;
 	}

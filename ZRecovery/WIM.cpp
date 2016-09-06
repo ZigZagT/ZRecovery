@@ -111,10 +111,11 @@ WIM_ImageInfo WIM::get_info(size_t index)
 	std::shared_ptr<void> information(info, [&size](auto p) {LocalFree(p); });
 
 	if (res == 0) {
+		auto k = GetLastError();
 		throw std::runtime_error("get information failed");
 	}
 
-	std::wstring xml(static_cast<wchar_t*>(info), size);
+	std::wstring xml(static_cast<wchar_t*>(info), size / sizeof(wchar_t));
 	//Alert(xml);
 	return WIM_ImageInfo(xml);
 }
