@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "COM_Proxy.h"
+#include "string_man.h"
+#include "UIBase.h"
 
 class WIM_ImageInfo {
 public:
@@ -30,6 +32,8 @@ private:
 class WIM
 {
 public:
+	using EventHandler = std::function<void(WIM* sender, WPARAM wParam, LPARAM lParam)>;
+
 	WIM();
 	WIM(std::wstring filepath);
 	virtual ~WIM();
@@ -42,13 +46,17 @@ public:
 	WIM_ImageInfo get_info(size_t index);
 	void set_info(size_t index, WIM_ImageInfo info);
 
+	EventHandler onProgressChange;
+	EventHandler onError;
+
+
 	static std::wstring open_wim_file();
 	static std::wstring save_wim_file();
 	static bool test_file_exist(std::wstring path);
-
 private:
 	HANDLE _handle = NULL;
 	bool _is_valid = false;
 	bool _is_create_new = false;
+	static DWORD CALLBACK message_procedure(DWORD  dwMessageId, WPARAM wParam, LPARAM lParam, PVOID  pvUserData);
 };
 

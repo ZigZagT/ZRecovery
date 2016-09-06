@@ -19,6 +19,7 @@ WIM::~WIM()
 {
 	if (_is_valid) {
 		WIMCloseHandle(_handle);
+		WIMUnregisterMessageCallback(_handle, reinterpret_cast<FARPROC>(&message_procedure));
 	}
 }
 
@@ -26,6 +27,7 @@ void WIM::open(std::wstring filepath)
 {
 	if (_is_valid) {
 		WIMCloseHandle(_handle);
+		WIMUnregisterMessageCallback(_handle, reinterpret_cast<FARPROC>(&message_procedure));
 		_handle = NULL;
 		_is_valid = false;
 		_is_create_new = false;
@@ -42,6 +44,12 @@ void WIM::open(std::wstring filepath)
 	else {
 		auto k = GetLastError();
 		throw std::runtime_error("WIM::open failed");
+	}
+
+	auto res = WIMRegisterMessageCallback(_handle, reinterpret_cast<FARPROC>(&message_procedure), this);
+	if (res == INVALID_CALLBACK_VALUE) {
+		auto k = GetLastError();
+		throw std::runtime_error("register message callback failed");
 	}
 }
 
@@ -127,6 +135,8 @@ void WIM::set_info(size_t index, WIM_ImageInfo info)
 		throw std::runtime_error("set information failed");
 	}
 }
+
+
 
 std::wstring WIM::open_wim_file()
 {
@@ -230,6 +240,57 @@ bool WIM::test_file_exist(std::wstring path)
 		WIMCloseHandle(wim);
 	}
 	return ret;
+}
+
+DWORD WIM::message_procedure(DWORD dwMessageId, WPARAM wParam, LPARAM lParam, PVOID pvUserData)
+{
+	WIM* wim = reinterpret_cast<WIM*>(pvUserData);
+
+	std::vector<std::wstring> bypass = {
+		L"\$windows.~bt",
+		L"\$windows.~ls",
+		L"\winpepge.sys",
+		L"\Windows\CSC",
+		L"\Recycled",
+		L"\Recycler",
+		L"\$Recycle.Bin",
+		L"\System Volume Information",
+		L"\swapfile.sys",
+		L"\pagefile.sys",
+		L"\hiberfil.sys"
+	};
+	switch (dwMessageId)
+	{
+	case WIM_MSG_PROCESS:
+	{
+		std::wstring file = reinterpret_cast<wchar_t*>(wParam);
+		BOOL* res = reinterpret_cast<BOOL*>(lParam);
+		for (auto& rule : bypass) {
+			auto loc = file.find(rule);
+			if (loc != file.npos && loc < 3) {
+				*res = 0;
+				break;
+			}
+		}
+		return WIM_MSG_SUCCESS;
+	}
+	case WIM_MSG_PROGRESS:
+	{
+		if (wim->onProgressChange) {
+			wim->onProgressChange(wim, wParam, lParam);
+		}
+		return WIM_MSG_SUCCESS;
+	}
+	case WIM_MSG_ERROR:
+	{
+		if (wim->onError) {
+			wim->onError(wim, wParam, lParam);
+		}
+		return WIM_MSG_SUCCESS;
+	}
+	default:
+		return WIM_MSG_SUCCESS;
+	}
 }
 
 
