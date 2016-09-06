@@ -3,6 +3,7 @@
 #include "ZRecovery.h"
 #include "load_resource.h"
 #include "debug.h"
+#include "COM_Proxy.h"
 
 
 WIM::WIM()
@@ -127,8 +128,6 @@ void WIM::set_info(size_t index, WIM_ImageInfo info)
 	}
 }
 
-
-
 std::wstring WIM::open_wim_file()
 {
 	extern HINSTANCE hInst;
@@ -233,24 +232,48 @@ bool WIM::test_file_exist(std::wstring path)
 	return ret;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#define test_hr(msg) if (FAILED(hr)) { k = GetLastError();	throw std::runtime_error(msg);	}
+
 WIM_ImageInfo::WIM_ImageInfo(std::wstring xml)
 {
 	if (xml[0] == leading_code) {
 		xml[0] = ' ';
 	}
 
-#define test_hr(msg) if (hr != S_OK) { k = GetLastError();	throw std::runtime_error(msg);	}
-	auto hr = CoCreateInstance(CLSID_DOMDocument60, nullptr, CLSCTX_ALL, IID_IXMLDOMDocument2, reinterpret_cast<void**>(&_doc));
-	decltype(GetLastError()) k;
-	if (FAILED(hr)) {
-		throw std::runtime_error("create IXMLDocument failed");
-	}
+	DWORD k;
+	HRESULT hr;
 	VARIANT_BOOL res;
+
+	COM_Proxy<IXMLDOMNode> doc_node;
+
+	hr = CoCreateInstance(CLSID_DOMDocument60, nullptr, CLSCTX_ALL, IID_IXMLDOMDocument2, reinterpret_cast<void**>(_doc.pget()));
+	test_hr("create IXMLDocument failed");
+	_doc.active();
+
 	hr = _doc->loadXML(const_cast<BSTR>(xml.c_str()), &res);
 	test_hr("loadXML failed");
-	
-	std::wstringstream oss;
-	BSTR str;
+
+	hr = _doc->get_firstChild(doc_node.pget());
+	test_hr("get root element failed");
+	doc_node.active();
+
+	//std::wstringstream oss;
+	//BSTR str;
 
 	//IXMLDOMParseError *err;
 	//_doc->get_parseError(&err);
@@ -285,123 +308,257 @@ WIM_ImageInfo::WIM_ImageInfo(std::wstring xml)
 	//test_hr(get baseName failed);
 
 	// Name
-	hr = _doc->selectSingleNode(L"/IMAGE/NAME", &_name);
+	hr = _doc->selectSingleNode(L"/IMAGE/NAME", _name.pget());
 	if (hr == S_FALSE) {
-		VARIANT val;
-		val.vt = VT_I4;
-		val.intVal = NODE_ELEMENT;
-		hr = _doc->createNode(val, L"NAME", NULL, &_name);
+		CComVariant val = NODE_ELEMENT;
+		hr = _doc->createNode(val, L"NAME", NULL, _name.pget());
 		test_hr("create node failed");
-		IXMLDOMNode* out;
-		hr = _doc->appendChild(_name, &out);
-		test_hr("append child failed");
-		if (out != NULL) {
-			_name->Release();
+		_name.active();
+
+		COM_Proxy<IXMLDOMNode> out;
+		hr = doc_node->appendChild(_name.get(), out.pget());
+		test_hr("append child faied");
+		if (out.get() != nullptr) {
+			out.active();
 			_name = out;
 		}
 	}
 	test_hr("select node /IMAGE/NAME failed");
+	_name.active();
 	hr = _name->hasChildNodes(&res);
+	test_hr("test hasChildNodes failed");
 	if (!res) {
-		IXMLDOMText* text;
-		IXMLDOMNode* insert_text;
-		_doc->createTextNode(L" ", &text);
-		_name->appendChild(text, &insert_text);
-		text->Release();
-		insert_text->Release();
+		COM_Proxy<IXMLDOMText> text;
+		COM_Proxy<IXMLDOMNode> insert_text;
+
+		hr = _doc->createTextNode(L" ", text);
+		test_hr("create text node failed");
+		text.active();
+
+		hr = _name->appendChild(text, insert_text);
+		test_hr("insert text failed");
+		insert_text.active();
 	}
 
 	// Description
-	hr = _doc->selectSingleNode(L"/IMAGE/DESCRIPTION", &_description);
+	hr = _doc->selectSingleNode(L"/IMAGE/DESCRIPTION", _description.pget());
 	if (hr == S_FALSE) {
-		VARIANT val;
-		val.vt = VT_I4;
-		val.intVal = NODE_ELEMENT;
-		hr = _doc->createNode(val, L"DESCRIPTION", NULL, &_description);
+		CComVariant val = NODE_ELEMENT;
+		hr = _doc->createNode(val, L"DESCRIPTION", NULL, _description.pget());
 		test_hr("create node failed");
-		IXMLDOMNode* out;
-		hr = _doc->appendChild(_description, &out);
-		test_hr("append child failed");
-		if (out != NULL) {
-			_description->Release();
+		_description.active();
+
+		COM_Proxy<IXMLDOMNode> out;
+		hr = doc_node->appendChild(_description.get(), out.pget());
+		test_hr("append child faied");
+		if (out.get() != nullptr) {
+			out.active();
 			_description = out;
 		}
 	}
 	test_hr("select node /IMAGE/DESCRIPTION failed");
+	_description.active();
 	hr = _description->hasChildNodes(&res);
+	test_hr("test hasChildNodes failed");
 	if (!res) {
-		IXMLDOMText* text;
-		IXMLDOMNode* insert_text;
-		_doc->createTextNode(L" ", &text);
-		_description->appendChild(text, &insert_text);
-		text->Release();
-		insert_text->Release();
+		COM_Proxy<IXMLDOMText> text;
+		COM_Proxy<IXMLDOMNode> insert_text;
+
+		hr = _doc->createTextNode(L" ", text);
+		test_hr("create text node failed");
+		text.active();
+
+		hr = _description->appendChild(text, insert_text);
+		test_hr("insert text failed");
+		insert_text.active();
 	}
 
 	// Date
-	hr = _doc->selectSingleNode(L"/IMAGE/DATE", &_date);
+	hr = _doc->selectSingleNode(L"/IMAGE/DATE", _date.pget());
 	if (hr == S_FALSE) {
-		VARIANT val;
-		val.vt = VT_I4;
-		val.intVal = NODE_ELEMENT;
-		hr = _doc->createNode(val, L"DATE", NULL, &_date);
+		CComVariant val = NODE_ELEMENT;
+		hr = _doc->createNode(val, L"DATE", NULL, _date.pget());
 		test_hr("create node failed");
-		IXMLDOMNode* out;
-		hr = _doc->appendChild(_date, &out);
-		test_hr("append child failed");
-		if (out != NULL) {
-			_date->Release();
+		_date.active();
+
+		COM_Proxy<IXMLDOMNode> out;
+		hr = doc_node->appendChild(_date.get(), out.pget());
+		test_hr("append child faied");
+		if (out.get() != nullptr) {
+			out.active();
 			_date = out;
 		}
 	}
 	test_hr("select node /IMAGE/DATE failed");
+	_date.active();
 	hr = _date->hasChildNodes(&res);
+	test_hr("test hasChildNodes failed");
 	if (!res) {
-		IXMLDOMText* text;
-		IXMLDOMNode* insert_text;
-		_doc->createTextNode(L" ", &text);
-		_date->appendChild(text, &insert_text);
-		text->Release();
-		insert_text->Release();
+		COM_Proxy<IXMLDOMText> text;
+		COM_Proxy<IXMLDOMNode> insert_text;
+
+		hr = _doc->createTextNode(L" ", text);
+		test_hr("create text node failed");
+		text.active();
+
+		hr = _date->appendChild(text, insert_text);
+		test_hr("insert text failed");
+		insert_text.active();
 	}
 
-	IXMLDOMNode* text;
-	VARIANT val;
 
-	_name->get_firstChild(&text);
-	text->get_nodeValue(&val);
-	oss << "name: " << val.bstrVal << std::endl;
-	CoTaskMemFree(val.bstrVal);
-	text->Release();
+	//COM_Proxy<IXMLDOMNode> text;
+	//CComVariant val;
 
-	_description->get_firstChild(&text);
-	text->get_nodeValue(&val);
-	oss << "description: " << val.bstrVal << std::endl;
-	CoTaskMemFree(val.bstrVal);
-	text->Release();
+	//text.reset();
+	//_name->get_firstChild(text);
+	//text.active();
+	//text->get_nodeValue(&val);
+	//oss << "name: " << val.bstrVal << std::endl;
 
-	_date->get_firstChild(&text);
-	text->get_nodeValue(&val);
-	oss << "date: " << val.bstrVal << std::endl;
-	CoTaskMemFree(val.bstrVal);
-	text->Release();
+	//text.reset();
+	//_description->get_firstChild(text);
+	//text.active();
+	//text->get_nodeValue(&val);
+	//oss << "description: " << val.bstrVal << std::endl;
+
+	//text.reset();
+	//_date->get_firstChild(text);
+	//text.active();
+	//text->get_nodeValue(&val);
+	//oss << "date: " << val.bstrVal << std::endl;
 
 
-	Alert(oss.str());
-#undef test_hr
+	//Alert(oss.str());
 }
 
 WIM_ImageInfo::~WIM_ImageInfo()
+{}
+
+std::wstring WIM_ImageInfo::get_name()
 {
-	if (_doc != NULL) {
-		_doc->Release();
-		_name->Release();
-		_description->Release();
-		_date->Release();
-	}
+	DWORD k;
+	HRESULT hr;
+
+	COM_Proxy<IXMLDOMNode> text;
+	CComVariant val;
+
+	hr = _name->get_firstChild(text);
+	test_hr("get first child failed");
+	text.active();
+	hr = text->get_nodeValue(&val);
+	test_hr("get node value failed");
+
+	return std::wstring(val.bstrVal);
+}
+
+std::wstring WIM_ImageInfo::get_description()
+{
+	DWORD k;
+	HRESULT hr;
+
+	COM_Proxy<IXMLDOMNode> text;
+	CComVariant val;
+
+	hr = _description->get_firstChild(text);
+	test_hr("get first child failed");
+	text.active();
+	hr = text->get_nodeValue(&val);
+	test_hr("get node value failed");
+
+	return std::wstring(val.bstrVal);
+}
+
+std::wstring WIM_ImageInfo::get_date()
+{
+	DWORD k;
+	HRESULT hr;
+
+	COM_Proxy<IXMLDOMNode> text;
+	CComVariant val;
+
+	hr = _date->get_firstChild(text);
+	test_hr("get first child failed");
+	text.active();
+	hr = text->get_nodeValue(&val);
+	test_hr("get node value failed");
+
+	return std::wstring(val.bstrVal);
+}
+
+std::wstring WIM_ImageInfo::get_date_localtime()
+{
+	std::wostringstream oss;
+	time_t time = std::stoll(get_date());
+	oss << std::put_time(localtime(&time), L"%F %T %Z");
+	return oss.str();
+}
+
+void WIM_ImageInfo::set_name(std::wstring name)
+{
+	DWORD k;
+	HRESULT hr;
+
+	COM_Proxy<IXMLDOMNode> text;
+	CComVariant val(name.c_str());
+
+	hr = _name->get_firstChild(text);
+	test_hr("get first child failed");
+	text.active();
+	hr = text->put_nodeValue(val);
+	test_hr("set node value failed");
+}
+
+void WIM_ImageInfo::set_description(std::wstring description)
+{
+	DWORD k;
+	HRESULT hr;
+
+	COM_Proxy<IXMLDOMNode> text;
+	CComVariant val(description.c_str());
+
+	hr = _description->get_firstChild(text);
+	test_hr("get first child failed");
+	text.active();
+	hr = text->put_nodeValue(val);
+	test_hr("set node value failed");
+}
+
+void WIM_ImageInfo::set_date(std::wstring date)
+{
+	DWORD k;
+	HRESULT hr;
+
+	COM_Proxy<IXMLDOMNode> text;
+	CComVariant val(date.c_str());
+
+	hr = _date->get_firstChild(text);
+	test_hr("get first child failed");
+	text.active();
+	hr = text->put_nodeValue(val);
+	test_hr("set node value failed");
+}
+
+void WIM_ImageInfo::set_date_now()
+{
+	time_t t = time(NULL);
+	set_date(std::to_wstring(t));
 }
 
 std::wstring WIM_ImageInfo::to_xml()
 {
-	return std::wstring();
+	HRESULT hr;
+	BSTR str;
+	DWORD k;
+
+	hr = _doc->get_xml(&str);
+	test_hr("get xml failed");
+
+	std::wstring ret(str);
+	if (ret[0] != leading_code) {
+		ret.insert(0, 1, leading_code);
+	}
+	return ret;
 }
+
+#undef test_hr

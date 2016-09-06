@@ -5,7 +5,6 @@ template <typename COM_Interface>
 class COM_Proxy
 {
 public:
-
 	COM_Proxy() :
 		_is_valid(false),
 		_com_interface(nullptr)
@@ -21,17 +20,36 @@ public:
 		}
 	}
 
-	const COM_Interface get() const
-	{
-		if (_is_valid) {
-			return _com_interface;
-		}
-		else {
-			throw std::runtime_error("invalid interface pointer");
-		}
+	operator COM_Interface*() {
+		return get();
 	}
 
-	void reset(COM_Interface* com_interface)
+	operator COM_Interface**() {
+		return pget();
+	}
+
+	COM_Interface* operator->() {
+		if (!_is_valid) {
+			throw std::runtime_error("invalid interface");
+		}
+		return _com_interface;
+	}
+
+	COM_Interface* get() const
+	{
+		return _com_interface;
+	}
+
+	COM_Interface** pget() const
+	{
+		return &const_cast<COM_Interface*>(_com_interface);
+	}
+
+	void active() {
+		_is_valid = true;
+	}
+
+	void reset(COM_Interface* com_interface = nullptr)
 	{
 		if (_is_valid) {
 			_com_interface->Release();

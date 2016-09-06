@@ -62,6 +62,9 @@ event(restore_on_browse_wim) {
 	}
 	wim.set_temporary_path(L"c:");
 	auto info = wim.get_info(0);
+	info.set_date_now();
+	Alert(info.get_date_localtime());
+	Alert(info.to_xml());
 	html_ui_set.query("backup-wim-path");
 }
 event(restore_on_select_backup) {

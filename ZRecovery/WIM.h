@@ -1,18 +1,29 @@
 #pragma once
 #include "stdafx.h"
+#include "COM_Proxy.h"
 
 class WIM_ImageInfo {
 public:
 	WIM_ImageInfo(std::wstring xml);
 	~WIM_ImageInfo();
 
+	std::wstring get_name();
+	std::wstring get_description();
+	std::wstring get_date();
+	std::wstring get_date_localtime();
+
+	void set_name(std::wstring name);
+	void set_description(std::wstring description);
+	void set_date(std::wstring date);
+	void set_date_now();
+
 	std::wstring to_xml();
 
 private:
-	IXMLDOMDocument2* _doc = NULL;
-	IXMLDOMNode* _name = NULL;
-	IXMLDOMNode* _description = NULL;
-	IXMLDOMNode* _date = NULL;
+	COM_Proxy<IXMLDOMDocument> _doc;
+	COM_Proxy<IXMLDOMNode> _name;
+	COM_Proxy<IXMLDOMNode> _description;
+	COM_Proxy<IXMLDOMNode> _date;
 	static const wchar_t leading_code = 0xfeff;
 };
 

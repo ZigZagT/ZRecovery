@@ -34,6 +34,7 @@
 #include <memory.h>
 #include <tchar.h>
 #include <stdint.h>
+#include <time.h>
 
 // C++ RunTime Header Files
 #include <iostream>
@@ -55,6 +56,8 @@
 #include <fstream>
 #include <sstream>
 #include <typeindex>
+#include <ctime>
+#include <iomanip>
 
 // COM Header Files
 #include <Objbase.h>
